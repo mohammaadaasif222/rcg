@@ -1,0 +1,11 @@
+id,Roll_No,adm_no,student_name,date_of_birth,gurdian_name,mother_name,phone,gender,address,city,country,zip_code,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+1,1,5193A,"Abhinav Singh",09-03-2011,"Ravinder Singh","Parbha Devi",9888118950,Male,"# 38C, Raipur Khurd, Chandigarh ","Chandigarh ",indian,160055,20,3,30,2,50,4.5,6,6,I,GEN,sgc,bpl,no,no,Hindu,"choose a option",03-11-2006,,
+2,2,2226A,Akshita,13-06-2010,"Girdhari Lal Singhal","Neeru Singhal",9888118950,Female,"# 576, Ph-II,Ramdarbar Colony ","Chandigarh ",indian,160056,10,2,50,3,,,,,,SC,,,yes,yes,Sikh,,04-11-2006,,
+3,3,4297A,"Amanat Kaur",02-07-2010,"Kuldip Singh","Sarbjit Kaur",9888118950,Female,"# 578, Ph-2, Ramdarbar ","Chandigarh ",indian,160057,25,4,26,8,,,,,,OBC,,ews,yes,yes,Muslim,,05-11-2006,,
+4,4,5186A,Ananya,28-01-2011,Dinesh,Sushma,9888118950,Female,"# 1673, Sector-29B, Chandigarh ","Chandigarh ",indian,160058,25,4,31,7,,,,,,ST,sgc,bpl,,,Hindu,,06-11-2006,,
+5,5,2756A,Anshuman,21-10-2009,Sandeep,Reena,9888118950,Male,"# 331, Village Daria ","Chandigarh ",indian,160059,25,5,31,7,,,,,,GEN,,,no,no,Muslim,,07-11-2006,,
+1,1,5193A,tenth,09-03-2011,"Ravinder Singh","Parbha Devi",9888118950,Male,"# 38C, Raipur Khurd, Chandigarh ","Chandigarh ",indian,160055,20,3,30,2,50,4.5,6,6,I,GEN,sgc,bpl,no,no,Hindu,"choose a option",03-11-2006,,
+2,2,2226A,Akshita,13-06-2010,"Girdhari Lal Singhal","Neeru Singhal",9888118950,Female,"# 576, Ph-II,Ramdarbar Colony ","Chandigarh ",indian,160056,10,2,50,3,,,,,,SC,,,yes,yes,Sikh,,04-11-2006,,
+3,3,4297A,"Amanat Kaur",02-07-2010,"Kuldip Singh","Sarbjit Kaur",9888118950,Female,"# 578, Ph-2, Ramdarbar ","Chandigarh ",indian,160057,25,4,26,8,,,,,,OBC,,ews,yes,yes,Muslim,,05-11-2006,,
+4,4,5186A,Ananya,28-01-2011,Dinesh,Sushma,9888118950,Female,"# 1673, Sector-29B, Chandigarh ","Chandigarh ",indian,160058,25,4,31,7,,,,,,ST,sgc,bpl,,,Hindu,,06-11-2006,,
+5,5,2756A,Anshuman,21-10-2009,Sandeep,Reena,9888118950,Male,"# 331, Village Daria ","Chandigarh ",indian,160059,25,5,31,7,,,,,,GEN,,,no,no,Muslim,,07-11-2006,,

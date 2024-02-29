@@ -1,0 +1,106 @@
+/* StudentTable.css */
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Adjust the z-index as needed */
+  }
+
+  
+  /* Adjust the width of the modal content */
+  .modal .max-w-8xl {
+    max-width: 100%; /* Set the max-width to 100% */
+  }
+  /* Modal content */
+  .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: none;  /* Adjust the width as needed */
+    max-height: 80%; /* Adjust the height as needed */
+    overflow-y: auto;
+    position: relative; /* Add this line */
+    margin: auto; /* Center the modal horizontally */
+  }
+  
+  /* Close button */
+  .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #555;
+  }
+  
+  /* Style for clickable student name */
+  .text-blue-500 {
+    color: #007bff; /* Adjust the color as needed */
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .text-blue-500:hover {
+    text-decoration: none;
+  }
+  
+  /* Style for modal table */
+  .modal table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  
+  .modal th, .modal td {
+    border: 5px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .modal th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .modal tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Responsive table styles */
+  @media screen and (max-width: 600px) {
+    .modal table {
+      font-size: 14px;
+    }
+  
+    .modal th, .modal td {
+      padding: 8px;
+    }
+  }
+  
+  /* Additional styling for modal content */
+  .modal dt {
+    margin-bottom: 5px; /* Adjust the margin as needed */
+    font-weight: bold;
+  }
+  
+  .modal dd {
+    margin-bottom: 10px; /* Adjust the margin as needed */
+  }
+  /* Your CSS file */
+.success-message {
+    color: green;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  

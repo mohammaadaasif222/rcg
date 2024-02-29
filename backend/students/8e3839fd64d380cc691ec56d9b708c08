@@ -1,0 +1,7 @@
+id,Roll_No,adm_no,student_name,date_of_birth,gurdian_name,mother_name,phone,gender,address,city,country,zip_code,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+1,1,123,abc,11/30/2022,fghkkkk,avfbg,852365,Male,"bhnm,","jbknm,",gjbknlm,513,300,,200,,,,,,II,GEN,sgc,ews,yes,yes,Hindu,BPL,11/30/2022,,
+2,2,456,def,11/30/2022,fghkkkk,avfbg,852365,Female,"bhnm,","jbknm,",gjbknlm,513,300,,200,,,,,,I,SC,,bpl,yes,yes,Sikh,,11/30/2022,,
+3,3,789,ghi,11/30/2022,fghkkkk,avfbg,852365,Female,"bhnm,","jbknm,",gjbknlm,513,300,,200,,,,,,II,OBC,sgc,bpl,yes,yes,Muslim,BPL,11/30/2022,,
+4,4,9909,asif,11/30/2022,mohammad,marrie,852365,Male,mohali,mohali,india,513,300,,200,,,,,,II,OBC,sgc,bpl,yes,yes,Muslim,BPL,11/30/2022,,
+5,5,789349,meer,11/30/2022,mohammad,marrie,852365,Female,chandigarh,mohali,india,513,300,,200,,,,,,II,OBC,sgc,bpl,yes,yes,Muslim,BPL,11/30/2022,,
+6,6,9999999,",msdj",12/1/2022,ert,rtet,89080453,male,chandigarh,,,,,,,,,,,,,,,,,,,,,,

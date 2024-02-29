@@ -1,0 +1,6 @@
+id,Roll_No,adm_no,student_name,date_of_birth,gurdian_name,mother_name,phone,gender,address,city,country,zip_code,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+1,30,1720A,lkg1,13-01-2010,Gurcharan Singh,Sonia,9888118950,Male,"# 1231, Ph-2, Ramdarbar ",Chandigarh ,indian,160084,25,5,31,7,,,,,,GEN,,,yes,yes,Sikh,,02-12-2006,,
+2,31,3379A,lkg2,09-07-2008,Sanjay Kumar,Laxmi,9888118950,Male,"# 2468, Ph-II, Ramdarbar ",Chandigarh ,indian,160085,25,5,31,7,,,,,,GEN,sgc,bpl,yes,yes,Sikh,,03-12-2006,,
+3,32,5170A,lkg3,04-01-2010,Tanuj,Ritu,9888118950,Male,"# 402, Ph-I, Ramdarbar ",Chandigarh ,indian,160086,25,5,31,7,,,,,,SC,,ews,no,no,Sikh,,04-12-2006,,
+4,33,3319A,lkg4,28-08-2009,Sunil,Sarita Devi,9888118950,Male,"# 2128, Ph-II, Ramdarbar ",Chandigarh ,indian,160087,25,5,31,7,,,,,,OBC,sgc,bpl,no,no,Hindu,,05-12-2006,,
+5,34,3285A,lkg5,09-11-2009,Bhagwan Singh Rawat,Urmila,9888118950,Male,"# 1148, Ph-II, Ramdarbar ",Chandigarh ,indian,160088,25,5,31,7,,,,,,ST,,,yes,yes,Sikh,,06-12-2006,,
