@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import {URL} from '../URL'
-
+import { URL } from "../URL";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 export default function CreateTeacher() {
   const [message, setMessage] = useState();
   const [error, setError] = useState();
+  const [showPass, setShowPass] = useState(false);
   const initialValues = {
     name: "",
     email: "",
@@ -50,15 +51,11 @@ export default function CreateTeacher() {
         formData.append("branch", values.branch);
         formData.append("about", values.about);
 
-        const response = await axios.post(
-         ` ${URL}/admin/staff`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post(` ${URL}/admin/staff`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         setMessage(response.data.message);
         setTimeout(() => {
           setMessage("");
@@ -69,7 +66,6 @@ export default function CreateTeacher() {
         console.error("Error submitting form:", error);
         setTimeout(() => {
           setError("");
-          
         }, 5000);
       }
     },
@@ -165,7 +161,7 @@ export default function CreateTeacher() {
                     )}
                   </div>
                   <div className="w-full lg:w-3/12 px-4">
-                    <div className="relative w-full mb-3">
+                    <div className="relative w-full mb-3 inline-block">
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="password"
@@ -174,7 +170,7 @@ export default function CreateTeacher() {
                       </label>
                       <input
                         id="password"
-                        type="password"
+                        type={showPass ? "text" : "password"}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.password}
@@ -184,12 +180,24 @@ export default function CreateTeacher() {
                             : ""
                         }`}
                       />
+                     <span onClick={() => setShowPass(!showPass)}className="absolute right-3 top-[70%] transform -translate-y-1/2 bg-transparent border-none p-0 cursor-pointer">
+                        {!showPass ? (
+                          <EyeIcon className="h-6 w-6 text-gray-600" aria-hidden="true" />
+                        ) : (
+                          <EyeSlashIcon
+                            className="h-6 w-6 text-gray-600"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </span>
                     </div>
+                    
                     {formik.touched.password && formik.errors.password && (
                       <p className="text-red-500 text-xs mt-1">
                         {formik.errors.password}
                       </p>
                     )}
+                     
                   </div>
                   <div className="w-full lg:w-3/12 px-4">
                     <div className="flex justify-center items-center flex-col w-full mb-3">
@@ -288,7 +296,7 @@ export default function CreateTeacher() {
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="branch"
                       >
-                        branch
+                        Designation
                       </label>
                       <input
                         type="text"
@@ -297,15 +305,15 @@ export default function CreateTeacher() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
-                          formik.touched.address && formik.errors.address
+                          formik.touched.branch && formik.errors.branch
                             ? "border-red-500"
                             : ""
                         }`}
                       />
                     </div>
-                    {formik.touched.address && formik.errors.address && (
+                    {formik.touched.branch && formik.errors.branch && (
                       <p className="text-red-500 text-xs mt-1">
-                        {formik.errors.address}
+                        {formik.errors.branch}
                       </p>
                     )}
                   </div>

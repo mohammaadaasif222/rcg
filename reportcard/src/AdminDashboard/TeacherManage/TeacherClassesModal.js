@@ -88,7 +88,7 @@ function TeacherClassesModal({
           ))}
         </ul>
       </div>
-      <div className="w-full pl-4 p-3 bg-gray-300 w-full shadow-xl rounded-lg">
+      <div className="w-full pl-4 p-3 bg-gray-300 shadow-xl rounded-lg">
         <h2>Subjects</h2>
         {selectedClass && (
           <table className="w-full border-collapse">

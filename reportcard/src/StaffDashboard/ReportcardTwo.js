@@ -1,12 +1,19 @@
-import React, { useState } from "react";
-import schoollogo from "./schoollogo.png"
-
+import React, { useEffect, useState } from "react";
+import schoollogo from "./schoollogo.png";
+import { useSelector } from "react-redux";
+import { URL } from "../URL";
 const ReportCardTwo = ({
   data,
   selectedStudent,
   reportCardData,
   closeReportCardModal,
 }) => {
+  const selectedVal = useSelector(
+    (state) => state.selectedValues.selectedValues
+  );
+
+  const selectedSection = selectedVal[1];
+  const selectedSubject = selectedVal[2];
 
   const handlePrint = () => {
     var printContents = document.getElementById("printable-content").innerHTML;
@@ -15,16 +22,29 @@ const ReportCardTwo = ({
     window.document.close();
   };
 
-  
+  const [vocationalData, setVocational] = useState("");
   const dateone = Date.now();
   const currentDate = new Date(dateone);
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1;
   const year = currentDate.getFullYear();
-  
+ console.log(selectedVal)
   const formattedDate = `${day}/${month}/${year}`;
-
-
+  const fetchVocationalData = async () => {
+    try {
+      const response = await fetch(
+        `${URL}/student/vocational/${selectedSection}/${selectedStudent.adm_no}`
+      );
+      const data = await response.json();
+      setVocational(data)
+      console.log('from two',data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchVocationalData();
+  }, []);
   const calculateOverallTotal = () => {
     let overallTotal = 0;
     let totalOutOf = 0;
@@ -39,15 +59,15 @@ const ReportCardTwo = ({
     const percentage = (overallTotal / totalOutOf) * 100;
     let grade;
     if (percentage >= 90) {
-      grade = 'A';
+      grade = "A";
     } else if (percentage >= 80) {
-      grade = 'B';
+      grade = "B";
     } else if (percentage >= 70) {
-      grade = 'C';
+      grade = "C";
     } else if (percentage >= 60) {
-      grade = 'D';
+      grade = "D";
     } else {
-      grade = 'F';
+      grade = "F";
     }
 
     return {
@@ -85,20 +105,21 @@ const ReportCardTwo = ({
                       </p>
                     </div>
                     <div className="row flex justify-around items-center text-green-600 gap-2">
-                    <p className="font-bold ">
-                      {" "}
-                      Email:Gurunanak_30b@rediffmail.com{" "}
-                    </p>
-                    <p className=" capitalize font-bold">
-                      Website:www.gnkschool.info{" "}
-                    </p>
-                    <p className="capitalize font-bold"> Phone: 01722654693</p>
-                  </div>
+                      <p className="font-bold ">
+                        {" "}
+                        Email:Gurunanak_30b@rediffmail.com{" "}
+                      </p>
+                      <p className=" capitalize font-bold">
+                        Website:www.gnkschool.info{" "}
+                      </p>
+                      <p className="capitalize font-bold">
+                        {" "}
+                        Phone: 01722654693
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div class="header-content text-center justify-between items-center">
-                  
-                </div>
+                <div class="header-content text-center justify-between items-center"></div>
               </div>
               <hr class="line" />
 
@@ -106,7 +127,7 @@ const ReportCardTwo = ({
                 <div className="row ">
                   <div className="col capitalize px-10">
                     <ul>
-                    <li style={{ color: "red" }}>Student Profile</li>
+                      <li style={{ color: "red" }}>Student Profile</li>
                       <li className="flex items-center mb-2">
                         <span className="w-32 font-semibold">Name:</span>
                         <span>{selectedStudent.student_name}</span>
@@ -116,8 +137,10 @@ const ReportCardTwo = ({
                           Class & Section:
                         </span>
                         <span>
-                        {reportCardData[0].subject.split("_")[0]}-
-                        {reportCardData[0].subject.split("_")[1].toUpperCase()}
+                          {reportCardData[0].subject.split("_")[0]}-
+                          {reportCardData[0].subject
+                            .split("_")[1]
+                            .toUpperCase()}
                         </span>
                       </li>
                       <li className="flex items-center mb-2">
@@ -266,10 +289,12 @@ const ReportCardTwo = ({
                       <td colSpan="4" rowSpan="2">
                         VACATIONAL SUBJECT (IF ANY)
                       </td>
-                      <td colSpan="4"> THEORY (MAX) </td>
-                      <td colSpan="4"> THEORY (MAX) </td>
-                      <td colSpan="4"> THEORY (MAX) </td>
-                      <td colSpan="4"> THEORY (MAX) </td>
+                      <td colSpan="4"> {vocationalData.theory_max} </td>
+                      <td colSpan="4"> {vocationalData.theory_obtain} </td>
+                      <td colSpan="4"> {vocationalData.practical_max} </td>
+                      <td colSpan="4"> {vocationalData.practical_obtain} </td>
+                    
+                      
                     </tr>
                     <tr className="capitalize text-center myborder">
                       <td colSpan="4"> </td>
@@ -279,8 +304,12 @@ const ReportCardTwo = ({
                     </tr>
                     <tr>
                       <td colSpan="5"> </td>
-                      <td colSpan="5">OVER ALL MARKS:{overallData.overallTotal} </td>
-                      <td colSpan="5">OVER ALL MARKS(%):{overallData.percentage} </td>
+                      <td colSpan="5">
+                        OVER ALL MARKS:{overallData.overallTotal}{" "}
+                      </td>
+                      <td colSpan="5">
+                        OVER ALL MARKS(%):{overallData.percentage}{" "}
+                      </td>
                       <td colSpan="5">OVER ALL GRADE:{overallData.grade} </td>
                     </tr>
                     <tr></tr>
@@ -376,7 +405,7 @@ const ReportCardTwo = ({
                     <tr>
                       <td colSpan="1" className="heading">
                         Attendance
-                      </td >
+                      </td>
                       <td colSpan="2">{selectedStudent.attendance_term_1} </td>
                     </tr>
                   </thead>
@@ -410,15 +439,18 @@ const ReportCardTwo = ({
                     <tr className="noborder">
                       <td className="noborder w-1/4">&nbsp;</td>
 
-                      <td colSpan={2}className="noborder w-1/4">&nbsp;</td>
+                      <td colSpan={2} className="noborder w-1/4">
+                        &nbsp;
+                      </td>
                       <td className="noborder w-1/4">&nbsp;</td>
                       <td className="noborder w-1/4">&nbsp;</td>
-
                     </tr>
                     <tr className="noborder">
                       <td className="noborder w-1/4 ">Class Teacher</td>
                       <td colSpan={2} className="noborder w-1/4"></td>
-                      <td className="noborder w-1/4">Principal / HeadMistress</td>
+                      <td className="noborder w-1/4">
+                        Principal / HeadMistress
+                      </td>
                       <td className="noborder w-1/4">Parent Signature</td>
                     </tr>
                   </tbody>
@@ -432,8 +464,10 @@ const ReportCardTwo = ({
                         Exam Result Date
                       </td>
 
-                      <td colSpan="1" className="noborder"> {formattedDate}</td>
-                      
+                      <td colSpan="1" className="noborder">
+                        {" "}
+                        {formattedDate}
+                      </td>
                     </tr>
                   </tbody>
                 </table>

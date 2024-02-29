@@ -241,7 +241,6 @@ router.post("/upload/marks", uploadcsv.single("file"), async (req, res) => {
 
   try {
     const csvData = await extractCsvData(filePath);
-
     // Create table if not exists
     let createTableQuery = `CREATE TABLE IF NOT EXISTS ${tablename} (`;
     createTableQuery += "adm_no VARCHAR(255) UNIQUE, "; // Ensure adm_no is unique
@@ -258,34 +257,87 @@ router.post("/upload/marks", uploadcsv.single("file"), async (req, res) => {
     for (const row of csvData) {
       // Check if student exists in the biodata table
       const studentExistsQuery = `SELECT COUNT(*) AS count FROM ${class_name}_${section_name}_biodata WHERE adm_no = ?`;
-      const [studentExistsResult] = await db.promise().query(studentExistsQuery, [row.adm_no]);
+      const [studentExistsResult] = await db
+        .promise()
+        .query(studentExistsQuery, [row.adm_no]);
       const studentExists = studentExistsResult[0].count > 0;
 
       if (!studentExists) {
-        return res.status(400).json({ error: `Student with adm_no ${row.adm_no} does not exist` });
+        return res
+          .status(400)
+          .json({ error: `Student with adm_no ${row.adm_no} does not exist` });
       }
 
       // If student exists, proceed with checking marks table and insertion
       // Check if student exists in the marks table
       const studentMarksExistsQuery = `SELECT COUNT(*) AS count FROM ${tablename} WHERE adm_no = ?`;
-      const [studentMarksExistsResult] = await db.promise().query(studentMarksExistsQuery, [row.adm_no]);
-      const studentMarksExists = studentMarksExistsResult[0].count > 0;
+      const studentMarksExistsQuery2 = `SELECT COUNT(*) AS count FROM ${class_name}_${section_name}_total WHERE adm_no = ?`;
+      const [studentMarksExistsResult] = await db
+        .promise()
+        .query(studentMarksExistsQuery, [row.adm_no]);
+      const [studentMarksExistsResult2] = await db
+        .promise()
+        .query(studentMarksExistsQuery2, [row.adm_no]);
 
+      const studentMarksExists = studentMarksExistsResult[0].count > 0;
+      const studentMarksExists2 = studentMarksExistsResult2[0].count > 0;
+
+      let columns = "adm_no";
+      let values = `'${row.adm_no}'`;
+      for (const column in row) {
+        if (column !== "adm_no") {
+          columns += `, ${column}`;
+          values += `, '${row[column]}'`;
+        }
+      }
       if (!studentMarksExists) {
         // Insert data into the marks table
-        let columns = "adm_no";
-        let values = `'${row.adm_no}'`;
-        for (const column in row) {
-          if (column !== "adm_no") {
-            columns += `, ${column}`;
-            values += `, '${row[column]}'`;
-          }
-        }
         const insertQuery = `INSERT INTO ${tablename} (${columns}) VALUES (${values})`;
         await db.promise().query(insertQuery);
+      } else {
+        // If the student's marks exist, update the data in the table
+        let updateQuery = `UPDATE ${tablename} SET `;
+        for (const column in row) {
+          if (column !== "adm_no") {
+            updateQuery += `${column} = '${row[column]}', `;
+          }
+        }
+        updateQuery = updateQuery.slice(0, -2); // Remove the last comma and space
+        updateQuery += ` WHERE adm_no = '${row.adm_no}'`;
+        await db.promise().query(updateQuery);
+      }
+
+      if (class_name == "ninth" || class_name == "ten") {
+        if (studentMarksExists2) {
+          const updateQuery = `UPDATE ${class_name}_${section_name}_total SET t1_${subject_name} = ${row.grand_total} WHERE adm_no = '${row.adm_no}'`;
+          await db.promise().query(updateQuery);
+        } else {
+          // Insert data into the total marks table
+          const insertQuery2 = `INSERT INTO ${class_name}_${section_name}_total (adm_no, t1_${subject_name}) VALUES ('${row.adm_no}', ${row.grand_total})`;
+          await db.promise().query(insertQuery2);
+        }
+      }
+      else if (class_name == "eleven" || class_name == "twelth") {
+        if (studentMarksExists2) {
+          const updateQuery = `UPDATE ${class_name}_${section_name}_total SET t1_${subject_name} = ${row.overall} WHERE adm_no = '${row.adm_no}'`;
+          await db.promise().query(updateQuery);
+        } else {
+          // Insert data into the total marks table
+          const insertQuery2 = `INSERT INTO ${class_name}_${section_name}_total (adm_no, t1_${subject_name}) VALUES ('${row.adm_no}', ${row.overall})`;
+          await db.promise().query(insertQuery2);
+        }
+      } else {
+        if (studentMarksExists2) {
+          // Update data in the total marks table
+          const updateQuery = `UPDATE ${class_name}_${section_name}_total SET t1_${subject_name} = ${row.total_marks_term_1}, t2_${subject_name} = ${row.total_marks_term_2} WHERE adm_no = '${row.adm_no}'`;
+          await db.promise().query(updateQuery);
+        } else {
+          // Insert data into the total marks table
+          const insertQuery2 = `INSERT INTO ${class_name}_${section_name}_total (adm_no, t1_${subject_name}, t2_${subject_name} ) VALUES ('${row.adm_no}', ${row.total_marks_term_1}, ${row.total_marks_term_2})`;
+          await db.promise().query(insertQuery2);
+        }
       }
     }
-
     res.status(200).json({
       message: "Data saved successfully",
       csvData,
@@ -295,69 +347,78 @@ router.post("/upload/marks", uploadcsv.single("file"), async (req, res) => {
     res.status(500).json({ error: "Error uploading marks" });
   }
 });
-router.post("/upload/nursery-marks", uploadcsv.single("file"), async (req, res) => {
-  const { path: filePath } = req.file;
-  const { class_name, section_name} = req.body;
-  const tablename = `${class_name}`;
+router.post(
+  "/upload/nursery-marks",
+  uploadcsv.single("file"),
+  async (req, res) => {
+    const { path: filePath } = req.file;
+    const { class_name, section_name } = req.body;
+    const tablename = `${class_name}`;
 
-  try {
-    const csvData = await extractCsvData(filePath);
+    try {
+      const csvData = await extractCsvData(filePath);
 
-    // Create table if not exists
-    let createTableQuery = `CREATE TABLE IF NOT EXISTS ${tablename} (`;
-    createTableQuery += "adm_no VARCHAR(255) UNIQUE, "; // Ensure adm_no is unique
-    for (const column in csvData[0]) {
-      if (column !== "adm_no") {
-        createTableQuery += `${column} VARCHAR(255), `;
-      }
-    }
-    createTableQuery = createTableQuery.slice(0, -2); // Remove the last comma and space
-    createTableQuery += ")";
-    await db.promise().query(createTableQuery);
-
-    // Check if students already exist
-    for (const row of csvData) {
-      // Check if student exists in the biodata table
-      const studentExistsQuery = `SELECT COUNT(*) AS count FROM ${class_name}_${section_name}_biodata WHERE adm_no = ?`;
-      const [studentExistsResult] = await db.promise().query(studentExistsQuery, [row.adm_no]);
-      const studentExists = studentExistsResult[0].count > 0;
-
-      if (!studentExists) {
-        return res.status(400).json({ error: `Student with adm_no ${row.adm_no} does not exist` });
-      }
-
-      // If student exists, proceed with checking marks table and insertion
-      // Check if student exists in the marks table
-      const studentMarksExistsQuery = `SELECT COUNT(*) AS count FROM ${tablename} WHERE adm_no = ?`;
-      const [studentMarksExistsResult] = await db.promise().query(studentMarksExistsQuery, [row.adm_no]);
-
-      const studentMarksExists = studentMarksExistsResult[0].count > 0;
-
-      if (!studentMarksExists) {
-        // Insert data into the marks table
-        let columns = "adm_no";
-        let values = `'${row.adm_no}'`;
-        for (const column in row) {
-          if (column !== "adm_no") {
-            columns += `, ${column}`;
-            values += `, '${row[column]}'`;
-          }
+      // Create table if not exists
+      let createTableQuery = `CREATE TABLE IF NOT EXISTS ${tablename} (`;
+      createTableQuery += "adm_no VARCHAR(255) UNIQUE, "; // Ensure adm_no is unique
+      for (const column in csvData[0]) {
+        if (column !== "adm_no") {
+          createTableQuery += `${column} VARCHAR(255), `;
         }
-        const insertQuery = `INSERT INTO ${tablename} (${columns}) VALUES (${values})`;
-        await db.promise().query(insertQuery);
       }
+      createTableQuery = createTableQuery.slice(0, -2); // Remove the last comma and space
+      createTableQuery += ")";
+      await db.promise().query(createTableQuery);
+
+      // Check if students already exist
+      for (const row of csvData) {
+        // Check if student exists in the biodata table
+        const studentExistsQuery = `SELECT COUNT(*) AS count FROM ${class_name}_${section_name}_biodata WHERE adm_no = ?`;
+        const [studentExistsResult] = await db
+          .promise()
+          .query(studentExistsQuery, [row.adm_no]);
+        const studentExists = studentExistsResult[0].count > 0;
+
+        if (!studentExists) {
+          return res.status(400).json({
+            error: `Student with adm_no ${row.adm_no} does not exist`,
+          });
+        }
+
+        // If student exists, proceed with checking marks table and insertion
+        // Check if student exists in the marks table
+        const studentMarksExistsQuery = `SELECT COUNT(*) AS count FROM ${tablename} WHERE adm_no = ?`;
+        const [studentMarksExistsResult] = await db
+          .promise()
+          .query(studentMarksExistsQuery, [row.adm_no]);
+
+        const studentMarksExists = studentMarksExistsResult[0].count > 0;
+
+        if (!studentMarksExists) {
+          // Insert data into the marks table
+          let columns = "adm_no";
+          let values = `'${row.adm_no}'`;
+          for (const column in row) {
+            if (column !== "adm_no") {
+              columns += `, ${column}`;
+              values += `, '${row[column]}'`;
+            }
+          }
+          const insertQuery = `INSERT INTO ${tablename} (${columns}) VALUES (${values})`;
+          await db.promise().query(insertQuery);
+        }
+      }
+
+      res.status(200).json({
+        message: "Data saved successfully",
+        csvData,
+      });
+    } catch (error) {
+      console.error("Error uploading marks:", error);
+      res.status(500).json({ error: "Error uploading marks" });
     }
-
-    res.status(200).json({
-      message: "Data saved successfully",
-      csvData,
-    });
-  } catch (error) {
-    console.error("Error uploading marks:", error);
-    res.status(500).json({ error: "Error uploading marks" });
   }
-});
-
+);
 
 router.post(
   "/upload/student-data",

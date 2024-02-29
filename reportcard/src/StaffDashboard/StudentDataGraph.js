@@ -10,14 +10,13 @@ const GraphComponent = () => {
   const [chartInstances, setChartInstances] = useState([]);
   const [csv, setCsv] = useState();
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const selectedVal = useSelector(
     (state) => state.selectedValues.selectedValues
   );
   const selectedClass = selectedVal[0];
   const selectedSection = selectedVal[1];
   const selectedClassNumber = selectedVal[3];
-  console.log(selectedClassNumber < 9, selectedSection);
 
   function generateTerm1ChartsData(dataFromApi) {
     const subjects = Object.keys(dataFromApi[0])
@@ -90,122 +89,65 @@ const GraphComponent = () => {
 
   function generateChartsDataForSecondry(dataFromApi) {
     const subjects = Object.keys(dataFromApi[0])
-      .filter(
-        (key) =>
-          key !== "gender" &&
-          key !== "id" &&
-          key !== "adm_no" &&
-          key !== "total" &&
-          key !== "grade" &&
-          key !== "art" &&
-          key !== "computer" &&
-          key !== "health" &&
-          key !== "gk" &&
-          key !== "deciplin" &&
-          key !== "workeducation" &&
-          key.startsWith("t1_")
-      )
-      .map((key) => key.slice(3));
+    .filter(
+      (key) =>
+        (key.startsWith("t1_")) &&
+        ![
+          "t1_total_marks",
+          "t1_scholastic_computer",
+          "t1_scholastic_drawing",
+          "t1_scholastic_gk",
+          "t1_scholastic_deciplin",
+          "t1_scholastic_remark",
+          "t1_scholastic_entery",
+        ].includes(key)
+    )
+    .map((key) => key.slice(3));
 
-    const gradeCategories = {
-      A1: { min: 91, max: 100 },
-      A2: { min: 81, max: 90 },
-      B1: { min: 71, max: 80 },
-      B2: { min: 61, max: 70 },
-      C1: { min: 51, max: 60 },
-      C2: { min: 41, max: 50 },
-      D: { min: 33, max: 40 },
-      E: { min: 0, max: 32 },
-    };
+  const gradeCategories = {
+    A1: { min: 91, max: 100 },
+    A2: { min: 81, max: 90 },
+    B1: { min: 71, max: 80 },
+    B2: { min: 61, max: 70 },
+    C1: { min: 51, max: 60 },
+    C2: { min: 41, max: 50 },
+    D: { min: 33, max: 40 },
+    E: { min: 0, max: 32 },
+  };
 
-    const term1ChartsData = subjects.map((subject) => {
-      const genderCategories = ["Male", "Female"];
+  const term1ChartsData = subjects.map((subject) => {
+    const genderCategories = ["Male", "Female"];
 
-      const datasets = genderCategories.map((gender) => {
-        const data = Object.keys(gradeCategories).map((grade) => {
-          const filteredData = dataFromApi.filter(
-            (student) =>
-              student.gender === gender &&
-              student[`t1_${subject}`] !== null &&
-              student[`t1_${subject}`] >= gradeCategories[grade].min &&
-              student[`t1_${subject}`] <= gradeCategories[grade].max
-          );
-          return filteredData.length;
-        });
-
-        return {
-          label: `${gender} - ${subject}`,
-          data: data,
-          backgroundColor: getRandomColor(),
-          borderColor: getRandomColor(),
-          borderWidth: 1,
-        };
+    const datasets = genderCategories.map((gender) => {
+      const data = Object.keys(gradeCategories).map((grade) => {
+        const filteredData = dataFromApi.filter(
+          (student) =>
+            student.gender === gender &&
+            (student[`t1_${subject}`] ?? 0) >= gradeCategories[grade].min &&
+            (student[`t1_${subject}`] ?? 0) <= gradeCategories[grade].max
+        );
+        return filteredData.length;
       });
 
       return {
-        labels: Object.keys(gradeCategories),
-        datasets: datasets,
+        label: `${gender} - ${subject}`,
+        data: data,
+        backgroundColor: getRandomColor(),
+        borderColor: getRandomColor(),
+        borderWidth: 1,
       };
     });
 
-    return term1ChartsData;
-  }
-
-  function generateChartsDataSenSec(dataFromApi) {
-    // Extracting subjects dynamically from the object keys
-    const subjects = Object.keys(dataFromApi)
-      .filter(
-        (key) =>
-          key !== "gender" &&
-          key !== "id" &&
-          key !== "adm_no" &&
-          key !== "overall" &&
-          key !== "overall_grade"
-      )
-      .map((key) => key);
-
-    const gradeCategories = {
-      A1: { min: 91, max: 100 },
-      A2: { min: 81, max: 90 },
-      B1: { min: 71, max: 80 },
-      B2: { min: 61, max: 70 },
-      C1: { min: 51, max: 60 },
-      C2: { min: 41, max: 50 },
-      D: { min: 33, max: 40 },
-      E: { min: 0, max: 32 },
+    return {
+      labels: Object.keys(gradeCategories),
+      datasets: datasets,
     };
+  });
 
-    const term1ChartsData = subjects.map((subject) => {
-      const genderCategories = ["Male", "Female"];
+  return term1ChartsData;
+}
 
-      const datasets = genderCategories.map((gender) => {
-        const data = Object.keys(gradeCategories).map((grade) => {
-          const filteredData = dataFromApi.filter(
-            (student) =>
-              student.gender === gender &&
-              (student[subject] ?? 0) >= gradeCategories[grade].min &&
-              (student[subject] ?? 0) <= gradeCategories[grade].max
-          );
-          return filteredData.length;
-        });
 
-        return {
-          label: `${gender} - ${subject}`,
-          data: data,
-          backgroundColor: getRandomColor(),
-          borderColor: getRandomColor(),
-          borderWidth: 1,
-        };
-      });
-
-      return {
-        labels: Object.keys(gradeCategories),
-        datasets: datasets,
-      };
-    });
-
-    return term1ChartsData;
-  }
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -219,13 +161,10 @@ const GraphComponent = () => {
         if (selectedClassNumber < 9) {
           const term1ChartData = generateTerm1ChartsData(dataFromApi);
           setTerm1ChartData(term1ChartData);
-        } else if (selectedClassNumber >= 9) {
-          const term1ChartData = generateChartsDataForSecondry(dataFromApi);
+        } else {    
+                const term1ChartData = generateChartsDataForSecondry(dataFromApi);
           setTerm1ChartData(term1ChartData);
-        } else if (selectedClassNumber >= 11) {
-          const term1ChartData = generateChartsDataSenSec(dataFromApi);
-          setTerm1ChartData(term1ChartData);
-        }
+        } 
       } catch (error) {
         console.error("Error fetching data from API:", error);
       }
@@ -251,10 +190,7 @@ const GraphComponent = () => {
   }, []);
   useEffect(() => {
     if (term1ChartData) {
-      // Destroy previous chart instances
       chartInstances.forEach((instance) => instance.destroy());
-
-      // Create new chart instances
       const newChartInstances = term1ChartData.map((data, index) => {
         const canvas = document.getElementById(`term1Chart-${index}`);
         if (canvas) {
@@ -273,8 +209,6 @@ const GraphComponent = () => {
         }
         return null;
       });
-
-      // Save the new instances to state
       setChartInstances(newChartInstances);
     }
   }, [term1ChartData]);

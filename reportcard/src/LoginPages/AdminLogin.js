@@ -10,7 +10,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 
-
 const AdminLogin = ({ loginUser}) => {
   const state = useSelector((state)=>state)
   console.log(state.auth.user);
@@ -45,7 +44,7 @@ const AdminLogin = ({ loginUser}) => {
 
 
   useEffect(()=>{
-  if(state.auth.user.token){
+  if(state.auth.user){
     history('/admindashboard');
   }
   })

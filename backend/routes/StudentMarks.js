@@ -6,7 +6,7 @@ const router = express.Router();
 router.post("/marks", (req, res) => {
   const { selectedClass, selectedSubject, selectedSection } = req.body;
   let query;
-  let section =selectedSection.toLowerCase()
+  let section = selectedSection.toLowerCase();
   if (selectedClass && selectedSubject) {
     query = `SELECT * FROM ${selectedClass}_${section}_biodata JOIN ${selectedClass}_${section}_${selectedSubject} on ${selectedClass}_${section}_biodata.adm_no = ${selectedClass}_${section}_${selectedSubject}.Adm_no   ;`;
   }
@@ -28,7 +28,7 @@ router.put("/marks/:adm_no", (req, res) => {
   } = req.body;
   const adm_no = req.params.adm_no;
   let query;
-  let section =selectedSection.toLowerCase()
+  let section = selectedSection.toLowerCase();
   if (selectedClass && selectedSubject) {
     query = `UPDATE ${selectedClass}_${section}_${selectedSubject} SET ? WHERE adm_no = "${adm_no}"`;
   } else {
@@ -54,7 +54,7 @@ router.get(
     const selectedClass = req.params.selectedClass;
     const selectedSection = req.params.selectedSection;
     let query;
-  let section =selectedSection.toLowerCase()
+    let section = selectedSection.toLowerCase();
 
     if (selectedClass && adm_no) {
       query = `SELECT * FROM ${selectedClass}_${section}_total where adm_no='${adm_no}';`;
@@ -71,29 +71,25 @@ router.get(
 );
 /////////////////////
 
-
-router.get(
-  "/primarygrade/:selectedClass/:adm_no",
-  (req, res) => {
-    const adm_no = req.params.adm_no;
-    const selectedClass = req.params.selectedClass;
-    let query;
-    if (selectedClass && adm_no) {
-      query = `SELECT * FROM ${selectedClass}_a_total where adm_no='${adm_no}';`;
-    }
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error("MySQL query error:", err);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.json(results);
-      }
-    });
+router.get("/primarygrade/:selectedClass/:adm_no", (req, res) => {
+  const adm_no = req.params.adm_no;
+  const selectedClass = req.params.selectedClass;
+  let query;
+  if (selectedClass && adm_no) {
+    query = `SELECT * FROM ${selectedClass}_a_total where adm_no='${adm_no}';`;
   }
-);
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.json(results);
+    }
+  });
+});
 ///////////////////////
 // POST endpoint to save data to the database
-router.post('/nursery', (req, res) => {
+router.post("/nursery", (req, res) => {
   const requestBody = req.body;
 
   // Check if the student exists in the class_name+section_biodata table
@@ -103,12 +99,15 @@ router.post('/nursery', (req, res) => {
   `;
   db.query(checkStudentQuery, (err, studentResult) => {
     if (err) {
-      console.error('Error executing SQL query: ' + err.stack);
-      res.status(500).json({success:false, error: 'Error checking student existence in the database'});
+      console.error("Error executing SQL query: " + err.stack);
+      res.status(500).json({
+        success: false,
+        error: "Error checking student existence in the database",
+      });
       return;
     }
     if (studentResult.length === 0) {
-      res.status(404).json({success:false, error:'Student does not exist'});
+      res.status(404).json({ success: false, error: "Student does not exist" });
       return;
     }
 
@@ -118,22 +117,29 @@ router.post('/nursery', (req, res) => {
     `;
     db.query(checkMarksQuery, (err, marksResult) => {
       if (err) {
-        console.error('Error executing SQL query: ' + err.stack);
-        res.status(500).json({success:false, error:'Error checking student marks existence in the database'});
+        console.error("Error executing SQL query: " + err.stack);
+        res.status(500).json({
+          success: false,
+          error: "Error checking student marks existence in the database",
+        });
         return;
       }
       if (marksResult.length > 0) {
         // If student's marks already exist, ignore the insertion
-        res.status(405).json({success:false, error:'Student marks already exist in the nursery table. Ignoring insertion.'});
+        res.status(405).json({
+          success: false,
+          error:
+            "Student marks already exist in the nursery table. Ignoring insertion.",
+        });
         return;
       }
 
       // Constructing placeholders for values
       const values = Object.values(requestBody);
-      const valuePlaceholders = values.map(val => db.escape(val)).join(', ');
+      const valuePlaceholders = values.map((val) => db.escape(val)).join(", ");
 
       // Constructing column names
-      const columns = Object.keys(requestBody).join(', ');
+      const columns = Object.keys(requestBody).join(", ");
 
       // SQL query to insert data into the database table
       const sqlQuery = `
@@ -143,21 +149,25 @@ router.post('/nursery', (req, res) => {
       // Execute the SQL query to insert marks
       db.query(sqlQuery, (err, result) => {
         if (err) {
-          console.error('Error executing SQL query: ' + err.stack);
-          res.status(500).json({success:false, error:'Error saving data to the database'});
+          console.error("Error executing SQL query: " + err.stack);
+          res.status(500).json({
+            success: false,
+            error: "Error saving data to the database",
+          });
           return;
         }
-        res.status(200).json({success:true, message:'Data saved successfully'});
+        res
+          .status(200)
+          .json({ success: true, message: "Data saved successfully" });
       });
     });
   });
 });
 
-
 router.post("/marks/graph/:selectedClass/:selectedSection", (req, res) => {
   const selectedClass = req.params.selectedClass;
   const selectedSection = req.params.selectedSection;
-  let section =selectedSection.toLowerCase()
+  let section = selectedSection.toLowerCase();
   let query;
   if (selectedClass) {
     query = `SELECT fb.gender, ft.* FROM ${selectedClass}_${section}_biodata AS fb JOIN ${selectedClass}_${section}_total AS ft ON fb.adm_no = ft.adm_no`;
@@ -177,8 +187,8 @@ router.get(
   "/reportcard/:selectedClass/:selectedSection/:adm_no",
   (req, res) => {
     const { selectedClass, selectedSection, adm_no } = req.params;
-      try {
-        const queryTableNames = `
+    try {
+      const queryTableNames = `
       SELECT table_name
       FROM information_schema.tables
       WHERE table_schema = 'gurunanak2024'
@@ -187,16 +197,16 @@ router.get(
         AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%biodata'
     `;
 
-        db.query(queryTableNames, (err, results) => {
-          if (err) {
-            console.error("MySQL query error:", err);
-            res.status(500).json({ message: "Internal Server Error" });
-          } else {
-            const tableRows = results.map((result) => result.TABLE_NAME);
+      db.query(queryTableNames, (err, results) => {
+        if (err) {
+          console.error("MySQL query error:", err);
+          res.status(500).json({ message: "Internal Server Error" });
+        } else {
+          const tableRows = results.map((result) => result.TABLE_NAME);
 
-            if (tableRows && tableRows.length > 0) {
-              const queries = tableRows.map(
-                (table) => `
+          if (tableRows && tableRows.length > 0) {
+            const queries = tableRows.map(
+              (table) => `
             SELECT
               '${table}' AS subject,
               ${table}.weightage_term1,
@@ -214,60 +224,62 @@ router.get(
             FROM ${table}
             WHERE ${table}.adm_no = ?
           `
-              );
+            );
 
-              const values = tableRows.map((table) =>
-                table === `${selectedClass}_${selectedSection}_biodata`
-                  ? [adm_no]
-                  : [adm_no]
-              );
-              const query = queries.join(" UNION ALL ");
+            const values = tableRows.map((table) =>
+              table === `${selectedClass}_${selectedSection}_biodata`
+                ? [adm_no]
+                : [adm_no]
+            );
+            const query = queries.join(" UNION ALL ");
 
-              db.query(query, values.flat(), (err, results) => {
-                if (err) {
-                  console.error("MySQL query error:", err);
-                  res.status(500).json({ error: "Internal Server Error" });
-                } else {
-                  res.json(results);
-                }
-              });
-            } else {
-              console.error("No eligible table names found.");
-              res
-                .status(404)
-                .json({ message: "No eligible table names found." });
-            }
+            db.query(query, values.flat(), (err, results) => {
+              if (err) {
+                console.error("MySQL query error:", err);
+                res.status(500).json({ error: "Internal Server Error" });
+              } else {
+                res.json(results);
+              }
+            });
+          } else {
+            console.error("No eligible table names found.");
+            res.status(404).json({ message: "No eligible table names found." });
           }
-        });
-      } catch (error) {
-        console.error("Error:", error.message);
-        res.status(500).send("Internal Server Error");
-      }
+        }
+      });
+    } catch (error) {
+      console.error("Error:", error.message);
+      res.status(500).send("Internal Server Error");
     }
+  }
 );
-router.get("/reportcardtwo/:selectedClass/:selectedSection/:adm_no", async (req, res) => {
-  const { selectedClass, selectedSection, adm_no } = req.params;
+router.get(
+  "/reportcardtwo/:selectedClass/:selectedSection/:adm_no",
+  async (req, res) => {
+    const { selectedClass, selectedSection, adm_no } = req.params;
 
-  try {
-    const queryTableNames = `
+    try {
+      const queryTableNames = `
       SELECT table_name
       FROM information_schema.tables
       WHERE table_schema = 'gurunanak2024'
         AND table_name LIKE '${selectedClass}_${selectedSection}%'
         AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%total'
         AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%biodata'
+        AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%vocational'
     `;
 
-    db.query(queryTableNames, (err, results) => {
-      if (err) {
-        console.error("MySQL query error:", err);
-        res.status(500).json({ message: "Internal Server Error" });
-      } else {
-        const tableRows = results.map((result) => result.TABLE_NAME);
-
-        if (tableRows && tableRows.length > 0) {
-          const queries = tableRows.map(
-            (table) => `
+      db.query(queryTableNames, (err, results) => {
+        if (err) {
+          console.error("MySQL query error:", err);
+          res.status(500).json({ message: "Internal Server Error" });
+        } else {
+          const tableRows = results.map((result) => result.TABLE_NAME);
+        
+          if (tableRows && tableRows.length > 0 && !tableRows.includes('vocational')) {
+         
+            const queries = tableRows.slice(0, tableRows.length - 1).map(
+              (table) => `
         SELECT
           '${table}' AS subject,
           ${table}.pen_paper_pt1,
@@ -282,40 +294,140 @@ router.get("/reportcardtwo/:selectedClass/:selectedSection/:adm_no", async (req,
           ${table}.final_grade
         FROM ${table}
         WHERE ${table}.adm_no = ?
-      `);
+      `
+            );
 
-      const values = tableRows.map((table) => (table === `${selectedClass}_${selectedSection}_biodata` ? [adm_no] : [adm_no]));
+            const values = tableRows.map((table) =>
+              table === `${selectedClass}_${selectedSection}_biodata`
+                ? [adm_no]
+                : [adm_no]
+            );
 
-      const query = queries.join(" UNION ALL ");
+            const query = queries.join(" UNION ALL ");
 
-      db.query(query, values.flat(), (err, results) => {
-        if (err) {
-          console.error("MySQL query error:", err);
-          res.status(500).json({ error: "Internal Server Error" });
-        } else {
-          res.json(results);
+            db.query(query, values.flat(), (err, results) => {
+              if (err) {
+                console.error("MySQL query error:", err);
+                res.status(500).json({ error: "Internal Server Error" });
+              } else {
+                res.json(results);
+              }
+            });
+          } else {
+            console.error("No eligible table names found.");
+            res.status(404).json({ message: "No eligible table names found." });
+          }
         }
       });
-    } else {
-      console.error("No eligible table names found.");
-      res
-        .status(404)
-        .json({ message: "No eligible table names found." });
+    } catch (error) {
+      console.error("Error:", error.message);
+      res.status(500).send("Internal Server Error");
     }
   }
+);
+
+router.post("/vocational", (req, res) => {
+  const data = req.body;
+
+  // Generate table name based on class_name, section, and subject
+  const tableName = `${data.class_name}_${data.section}_${data.subject}`;
+
+  // Check if table exists, create if not
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS ${tableName} (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      student_name VARCHAR(255),
+      adm_no VARCHAR(255),
+      theory_max INT,
+      theory_obtain INT,
+      practical_max INT,
+      practical_obtain INT
+    )
+  `;
+  db.query(createTableQuery, (err, result) => {
+    if (err) {
+      console.error("Error creating table:", err);
+      res.status(500).send("Error creating table");
+      return;
+    }
+    console.log("Table created or already exists");
+
+    const checkStudentQuery = `
+      SELECT * FROM ${tableName} WHERE adm_no = ?
+    `;
+    db.query(checkStudentQuery, [data.adm_no], (err, rows) => {
+      if (err) {
+        console.error("Error checking student:", err);
+        res.status(500).send("Error checking student");
+        return;
+      }
+
+      if (rows.length > 0) {
+        res.status(400).send("Student data already exists");
+        return;
+      }
+
+      // Insert data into the table
+      const insertQuery = `
+        INSERT INTO ${tableName} 
+        (student_name, adm_no, theory_max, theory_obtain, practical_max, practical_obtain) 
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+      const values = [
+        data.student_name,
+        data.adm_no,
+        data.theory_max,
+        data.theory_obtain,
+        data.practical_max,
+        data.practical_obtain,
+      ];
+
+      db.query(insertQuery, values, (err, result) => {
+        if (err) {
+          console.error("Error saving data to MySQL:", err);
+          res.status(500).send("Error saving data");
+          return;
+        }
+        console.log("Data saved to MySQL");
+        res.status(200).send("Data saved successfully");
+      });
+    });
+  });
 });
-  } catch (error) {
-    console.error("Error:", error.message);
-    res.status(500).send("Internal Server Error");
-  }
+
+router.get("/vocational/:section/:adm_no", (req, res) => {
+  const adm_no = req.params.adm_no;
+  const section = req.params.section;
+  const subject = req.params.subject;
+  const tableName = `ninth_${section}_vocational_physics`;
+
+  const selectQuery = `
+    SELECT * FROM ${tableName} WHERE adm_no = ?
+  `;
+
+  db.query(selectQuery, [adm_no], (err, rows) => {
+    if (err) {
+      console.error("Error retrieving data from MySQL:", err);
+      res.status(500).send("Error retrieving data");
+      return;
+    }
+
+    if (rows.length === 0) {
+      res.status(404).send("No data found for the provided admission number");
+      return;
+    }
+
+    // Data found, send it back in the response
+    res.status(200).json(rows[0]); // Assuming you want to send only the first row found
+  });
 });
 
-
-
-router.get("/reportcardthree/:selectedClass/:selectedSection/:adm_no", async (req, res) => {
-  const { selectedClass, selectedSection, adm_no } = req.params;
-  try {
-    const queryTableNames = `
+router.get(
+  "/reportcardthree/:selectedClass/:selectedSection/:adm_no",
+  async (req, res) => {
+    const { selectedClass, selectedSection, adm_no } = req.params;
+    try {
+      const queryTableNames = `
       SELECT table_name
       FROM information_schema.tables
       WHERE table_schema = 'gurunanak2024'
@@ -324,16 +436,16 @@ router.get("/reportcardthree/:selectedClass/:selectedSection/:adm_no", async (re
         AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%biodata'
     `;
 
-    db.query(queryTableNames, (err, results) => {
-      if (err) {
-        console.error("MySQL query error:", err);
-        res.status(500).json({ message: "Internal Server Error" });
-      } else {
-        const tableRows = results.map((result) => result.TABLE_NAME);
+      db.query(queryTableNames, (err, results) => {
+        if (err) {
+          console.error("MySQL query error:", err);
+          res.status(500).json({ message: "Internal Server Error" });
+        } else {
+          const tableRows = results.map((result) => result.TABLE_NAME);
 
-        if (tableRows && tableRows.length > 0) {
-          const queries = tableRows.map(
-            (table) => `
+          if (tableRows && tableRows.length > 0) {
+            const queries = tableRows.map(
+              (table) => `
         SELECT
           '${table}' AS subject,
           ${table}.theory_max,
@@ -344,31 +456,35 @@ router.get("/reportcardthree/:selectedClass/:selectedSection/:adm_no", async (re
           ${table}.overall_grade
         FROM ${table}
         WHERE ${table}.adm_no = ?
-      `);
+      `
+            );
 
-      const values = tableRows.map((table) => (table === `${selectedClass}_${selectedSection}_biodata` ? [adm_no] : [adm_no]));
+            const values = tableRows.map((table) =>
+              table === `${selectedClass}_${selectedSection}_biodata`
+                ? [adm_no]
+                : [adm_no]
+            );
 
-      const query = queries.join(" UNION ALL ");
+            const query = queries.join(" UNION ALL ");
 
-      db.query(query, values.flat(), (err, results) => {
-        if (err) {
-          console.error("MySQL query error:", err);
-          res.status(500).json({ error: "Internal Server Error" });
-        } else {
-          res.json(results);
+            db.query(query, values.flat(), (err, results) => {
+              if (err) {
+                console.error("MySQL query error:", err);
+                res.status(500).json({ error: "Internal Server Error" });
+              } else {
+                res.json(results);
+              }
+            });
+          } else {
+            console.error("No eligible table names found.");
+            res.status(404).json({ message: "No eligible table names found." });
+          }
         }
       });
-    } else {
-      console.error("No eligible table names found.");
-      res
-        .status(404)
-        .json({ message: "No eligible table names found." });
+    } catch (error) {
+      console.error("Error:", error.message);
+      res.status(500).send("Internal Server Error");
     }
   }
-});
-  } catch (error) {
-    console.error("Error:", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
+);
 module.exports = router;

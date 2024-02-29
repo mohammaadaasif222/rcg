@@ -103,6 +103,25 @@ router.post("/update",  (req, res) => {
     }
   });
 });
+router.delete("/delete/:userId", (req, res) => {
+  const userId = req.params.userId;
+
+  const sql = `DELETE FROM teacher WHERE teacher_id = ${userId};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Error during deletion:", err);
+      return res.status(500).json({ error: "Error during deletion" });
+    }
+
+    if (result.affectedRows > 0) {
+      res.status(200).json({ success: true, message: "Deletion successful" });
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  });
+});
+
 
 
 module.exports = router;

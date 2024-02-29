@@ -9,6 +9,7 @@ export default function Admindashboard() {
   const state = useSelector((state)=>state.Allteachers)
   const dispatch  = useDispatch()
 
+  console.log(state.close);
   
   const toggleMobileMenuOpen =(value)=>{
     dispatch(setMenuClose(value));
@@ -38,7 +39,7 @@ export default function Admindashboard() {
         <Dialog
           as="div"
           className="lg:hidden flex"
-          open={state.close}
+          open={state.close || false}
           onClose={setMenuClose}
         >
           <div className="fixed inset-0 z-50" />

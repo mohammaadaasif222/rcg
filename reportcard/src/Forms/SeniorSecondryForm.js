@@ -296,7 +296,6 @@ const SeniorSecondaryForm = () => {
             </div>
           </div>
         </div>
-        <hr className="my-6 border-b-1 border-blueGray-300" />
 
         <hr className="my-6 border-b-1 border-blueGray-300" />
         <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase text-start">

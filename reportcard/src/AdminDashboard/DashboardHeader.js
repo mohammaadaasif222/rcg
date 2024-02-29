@@ -87,7 +87,7 @@ export default function DashboardHeader() {
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src={require(`../static/teachers/${Admindata.imagename}`)}
+                          src={require(`../static/teachers/${Admindata.imagename == null ? 'default_user.png' :Admindata.imagename  }`) || require(`../static/teachers/default_user.png`)  }
                           alt=""
                         />
                       </Menu.Button>

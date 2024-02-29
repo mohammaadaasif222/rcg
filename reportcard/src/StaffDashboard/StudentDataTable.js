@@ -16,6 +16,138 @@ const StudentDataTable = () => {
   );
   const selectedClass = selectedVal[0];
   const selectedSection = selectedVal[1];
+  const selectedClassNumber = selectedVal[3];
+
+  function generateTerm1ChartsData(dataFromApi) {
+    const subjects = Object.keys(dataFromApi[0])
+      .filter(
+        (key) =>
+          (key.startsWith("t1_") || key.startsWith("t2_")) &&
+          ![
+            "t1_total",
+            "t1_percentage",
+            "t2_total",
+            "t2_percentage",
+            "t1_scholastic_computer",
+            "t1_scholastic_drawing",
+            "t1_scholastic_gk",
+            "t1_scholastic_deciplin",
+            "t1_scholastic_remark",
+            "t1_scholastic_entery",
+            "t2_scholastic_workeducation",
+            "t2_scholastic_art",
+            "t2_scholastic_health",
+            "t2_scholastic_deciplin",
+            "t2_scholastic_remark",
+            "t2_scholastic_entery",
+          ].includes(key)
+      )
+      .map((key) => key.slice(3));
+
+    const gradeCategories = {
+      A1: { min: 91, max: 100 },
+      A2: { min: 81, max: 90 },
+      B1: { min: 71, max: 80 },
+      B2: { min: 61, max: 70 },
+      C1: { min: 51, max: 60 },
+      C2: { min: 41, max: 50 },
+      D: { min: 33, max: 40 },
+      E: { min: 0, max: 32 },
+    };
+
+    const term1ChartsData = subjects.map((subject) => {
+      const genderCategories = ["Male", "Female"];
+
+      const datasets = genderCategories.map((gender) => {
+        const data = Object.keys(gradeCategories).map((grade) => {
+          const filteredData = dataFromApi.filter(
+            (student) =>
+              student.gender === gender &&
+              (student[`t1_${subject}`] ?? 0) >= gradeCategories[grade].min &&
+              (student[`t1_${subject}`] ?? 0) <= gradeCategories[grade].max
+          );
+          return filteredData.length;
+        });
+
+        return {
+          label: `${gender} - ${subject}`,
+          data: data,
+          backgroundColor: getRandomColor(),
+          borderColor: getRandomColor(),
+          borderWidth: 1,
+        };
+      });
+
+      return {
+        labels: Object.keys(gradeCategories),
+        datasets: datasets,
+      };
+    });
+
+    return term1ChartsData;
+  }
+
+  function generateChartsDataForSecondry(dataFromApi) {
+    const subjects = Object.keys(dataFromApi[0])
+    .filter(
+      (key) =>
+        (key.startsWith("t1_")) &&
+        ![
+          "t1_total_marks",
+          "t1_scholastic_computer",
+          "t1_scholastic_drawing",
+          "t1_scholastic_gk",
+          "t1_scholastic_deciplin",
+          "t1_scholastic_remark",
+          "t1_scholastic_entery",
+        ].includes(key)
+    )
+    .map((key) => key.slice(3));
+
+  const gradeCategories = {
+    A1: { min: 91, max: 100 },
+    A2: { min: 81, max: 90 },
+    B1: { min: 71, max: 80 },
+    B2: { min: 61, max: 70 },
+    C1: { min: 51, max: 60 },
+    C2: { min: 41, max: 50 },
+    D: { min: 33, max: 40 },
+    E: { min: 0, max: 32 },
+  };
+
+  const term1ChartsData = subjects.map((subject) => {
+    const genderCategories = ["Male", "Female"];
+
+    const datasets = genderCategories.map((gender) => {
+      const data = Object.keys(gradeCategories).map((grade) => {
+        const filteredData = dataFromApi.filter(
+          (student) =>
+            student.gender === gender &&
+            (student[`t1_${subject}`] ?? 0) >= gradeCategories[grade].min &&
+            (student[`t1_${subject}`] ?? 0) <= gradeCategories[grade].max
+        );
+        return filteredData.length;
+      });
+
+      return {
+        label: `${gender} - ${subject}`,
+        data: data,
+        backgroundColor: getRandomColor(),
+        borderColor: getRandomColor(),
+        borderWidth: 1,
+      };
+    });
+
+    return {
+      labels: Object.keys(gradeCategories),
+      datasets: datasets,
+    };
+  });
+
+  return term1ChartsData;
+}
+
+
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -24,81 +156,24 @@ const StudentDataTable = () => {
           `${URL}/student/marks/graph/${selectedClass}/${selectedSection}`
         );
         const dataFromApi = response.data;
+        console.log(dataFromApi);
         setCsv(dataFromApi[0]);
-        const subjects = Object.keys(dataFromApi[0])
-          .filter(
-            (key) =>
-              (key.startsWith("t1_") || key.startsWith("t2_")) &&
-              ![
-                "t1_total",
-                "t1_percentage",
-                "t2_total",
-                "t2_percentage",
-                "t1_scholastic_computer",
-                "t1_scholastic_drawing",
-                "t1_scholastic_gk",
-                "t1_scholastic_deciplin",
-                "t1_scholastic_remark",
-                "t1_scholastic_entery",
-                "t2_scholastic_workeducation",
-                "t2_scholastic_art",
-                "t2_scholastic_health",
-                "t2_scholastic_deciplin",
-                "t2_scholastic_remark",
-                "t2_scholastic_entery",
-              ].includes(key)
-          )
-          .map((key) => key.slice(3));
-        const gradeCategories = {
-          A1: { min: 91, max: 100 },
-          A2: { min: 81, max: 90 },
-          B1: { min: 71, max: 80 },
-          B2: { min: 61, max: 70 },
-          C1: { min: 51, max: 60 },
-          C2: { min: 41, max: 50 },
-          D: { min: 33, max: 40 },
-          E: { min: 0, max: 32 },
-        };
-        const term1ChartsData = subjects.map((subject) => {
-          const genderCategories = ["Male", "Female"];
-
-          const datasets = genderCategories.map((gender) => {
-            const data = Object.keys(gradeCategories).map((grade) => {
-              const filteredData = dataFromApi.filter(
-                (student) =>
-                  student.gender === gender &&
-                  student.gender === gender &&
-                  student[`t1_${subject}`] >= gradeCategories[grade].min &&
-                  student[`t1_${subject}`] <= gradeCategories[grade].max
-              );
-              return filteredData.length;
-            });
-
-            return {
-              label: `${gender} - ${subject}`,
-              data: data,
-              backgroundColor: getRandomColor(),
-              borderColor: getRandomColor(),
-              borderWidth: 1,
-            };
-          });
-
-          return {
-            labels: Object.keys(gradeCategories),
-            datasets: datasets,
-          };
-        });
-
-        setTerm1ChartData(term1ChartsData);
+        if (selectedClassNumber < 9) {
+          const term1ChartData = generateTerm1ChartsData(dataFromApi);
+          setTerm1ChartData(term1ChartData);
+        } else {    
+                const term1ChartData = generateChartsDataForSecondry(dataFromApi);
+          setTerm1ChartData(term1ChartData);
+        } 
       } catch (error) {
         console.error("Error fetching data from API:", error);
       }
     };
 
-    if (selectedClass !== "") {
+    if (selectedClass && selectedSection) {
       fetchDataFromApi();
     }
-  }, [selectedClass]);
+  }, [selectedClass, selectedSection]);
 
   const getRandomColor = () => {
     const letters = "0123456789ABCDEF";
