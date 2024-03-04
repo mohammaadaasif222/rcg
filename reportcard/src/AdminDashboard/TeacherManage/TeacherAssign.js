@@ -3,6 +3,7 @@ import TeacherClassesModal from "./TeacherClassesModal.js";
 import { fetchTeachers, fetchClasses } from "../../redux/actions.js";
 import { useSelector, useDispatch } from "react-redux";
 import TeacherProfile from "./TeacherProfile.js";
+import { Cog6ToothIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { URL } from "../../URL";
 function importAll(r) {
   let images = {};
@@ -36,6 +37,7 @@ export default function Teacher() {
   const { Allclasses, loading: classesLoading } = useSelector(
     (state) => state.Allclasses
   );
+  const loggedinUser = useSelector((state) => state.auth.user.user);
 
   useEffect(() => {
     dispatch(fetchTeachers());
@@ -108,11 +110,10 @@ export default function Teacher() {
       console.log(data);
       setMessage(data.message);
       dispatch(fetchTeachers());
-      setTimeout(()=>{
-        setMessage('')
-      },5000)
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
     } catch (error) {
-
       console.error("There was a problem with the fetch operation:", error);
     }
   };
@@ -135,9 +136,7 @@ export default function Teacher() {
             </div>
             <div>
               <p class="font-bold">Success</p>
-              <p class="text-sm">
-                {message}
-              </p>
+              <p class="text-sm">{message}</p>
             </div>
           </div>
         </div>
@@ -159,155 +158,78 @@ export default function Teacher() {
             </div>
             <div>
               <p class="font-bold">Error</p>
-              <p class="text-sm">
-                {error}
-              </p>
+              <p class="text-sm">{error}</p>
             </div>
           </div>
         </div>
       )}
-      <div className="flex flex-col md:flex-row p-2">
-        <div className="mb-4 md:mb-0 md:w-full pr-2">
-          <ul
-            role="list"
-            className="divide-y divide-gray-100 flex flex-wrap gap-5 justify-center"
-          >
-            {teacherData.map((teacher) => (
-              <li
-                key={teacher.email}
-                className="flex justify-between gap-x-6 py-5 w-[45%]  px-3 bg-white  shadow-xl rounded-lg"
-              >
-                <div className="flex min-w-0 gap-x-4">
-                  <img
-                    className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                    src={
-                      images[teacher.imagename] ||
-                      require(`../../static/teachers/default_user.png`)
-                    }
-                    alt=""
-                  />
-
-                  <div className="min-w-0 flex-auto">
-                    <p
-                      onClick={() => editteacher(teacher)}
-                      className="text-sm font-semibold leading-6 text-gray-900"
-                    >
-                      {teacher.name}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                      {teacher.email}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                      {teacher.address}
-                    </p>
-                  </div>
-                </div>
-
-                <div className=" shrink-0 sm:flex sm:flex-col sm:items-end flex">
-                  <p className="text-sm leading-6 text-gray-900">
-                    I/c of {teacher.incharge}
-                  </p>
-
-                  <p className="mt-1 text-xs leading-5 text-gray-500">
-                    <span>{teacher.phone}</span>
-                  </p>
-                  <div className="mt-1 flex items-center gap-x-1.5">
-                    <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                    </div>
-                    <p className="text-xs leading-5 text-gray-500">
-                      {teacher.role}
-                    </p>
-                  </div>
-                </div>
-                <div className=" shrink-0 sm:flex sm:flex-col sm:items-end flex gap-3">
-                  <button
-                    onClick={() =>
-                      handleTeacherClick(teacher.teacher_id, teacher.name)
-                    }
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
+      <ul className="lg:flex lg:flex-wrap lg:gap-7">
+        {teacherData
+          .filter((item) => item.email !== 'parth@gmail.com')
+          .map((teacher) => (
+            <li
+              key={teacher.email}
+              className="flex justify-between flex-col sm:flex-row py-5 w-full xl:w-[48%] px-3 bg-white shadow-xl rounded-lg my-3"
+            >
+              <div className="flex justify-between gap-3 items-center">
+                <img
+                  className="h-12 w-12 flex-none rounded-full bg-gray-50 shadow-md"
+                  src={
+                    images[teacher.imagename] ||
+                    require(`../../static/teachers/default_user.png`)
+                  }
+                  alt=""
+                />
+                <div className="">
+                  <p
+                    onClick={() => editteacher(teacher)}
+                    className="text-sm font-semibold uppercase leading-6 text-blue-500 cursor-pointer underline-0"
                   >
-                    Assign class
-                  </button>
-                  <button
-                    onClick={() => handleTeacherDelete(teacher.teacher_id)}
-                    className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded text-sm px-5 py-2.5 text-center me-2 mb-2"
-                  >
-                    Delete
-                  </button>
+                    {teacher.name}
+                  </p>
+                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                    {teacher.email}
+                  </p>
+                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                    {teacher.address.split(" ")[2]}
+                  </p>
                 </div>
-              </li>
-            ))}
-          </ul>{" "}
-        </div>
+              </div>
 
-        {/* <div className="w-full md:w-1/2 pl-2">
-          <div className="p-3 bg-white w-full shadow-xl rounded-lg">
-            <ul role="list" className="divide-y divide-gray-100">
-              {teacherData.slice(midpoint).map((teacher) => (
-                <li
-                  key={teacher.email}
-                  className="flex justify-between gap-x-6 py-5"
-                >
-                  <div className="flex min-w-0 gap-x-4">
-                    <img
-                      className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                      src={
-                        images[teacher.imagename] ||
-                        require(`../../static/teachers/default_user.png`)
-                      }
-                      alt=""
-                    />
-                    <div className="min-w-0 flex-auto">
-                      <p
-                        onClick={() => editteacher(teacher)}
-                        className="text-sm font-semibold leading-6 text-gray-900"
-                      >
-                        {teacher.name}
-                      </p>
-                      <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {teacher.email}
-                      </p>
-                      <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {teacher.address}
-                      </p>
-                    </div>
+              <div className="flex items-center flex-col gap-x-5">
+                <p className="text-sm leading-6 text-gray-900">
+                  I/c of {teacher.incharge}
+                </p>
+                <p className="mt-1 text-xs leading-5 text-gray-500">
+                  <span>{teacher.phone}</span>
+                </p>
+                <div className="mt-1 flex items-center gap-x-1.5">
+                  <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   </div>
-                  <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                    <p className="text-sm leading-6 text-gray-900">
-                      I/c of {teacher.incharge}
-                    </p>
+                  <p className="text-xs leading-5 text-gray-500">
+                    {teacher.role}
+                  </p>
+                </div>
+              </div>
 
-                    <p className="mt-1 text-xs leading-5 text-gray-500">
-                      {teacher.phone}
-                    </p>
-                    <div className="mt-1 flex items-center gap-x-1.5">
-                      <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                        <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                      </div>
-                      <p className="text-xs leading-5 text-gray-500">
-                        {teacher.role}
-                      </p>
-                    </div>
-                  </div>
-                  <div className=" shrink-0 sm:flex sm:flex-col sm:items-end flex">
-                    <button
-                      onClick={() =>
-                        handleTeacherClick(teacher.teacher_id, teacher.name)
-                      }
-                      className="bg-blue-500 text-white px-4 py-2 rounded"
-                    >
-                      Assign class
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div> */}
-      </div>
-      {/* </div>
-      </div> */}
+              <div className="flex items-center gap-3">
+                <Cog6ToothIcon
+                  onClick={() =>
+                    handleTeacherClick(teacher.teacher_id, teacher.name)
+                  }
+                  className="text-gray-700 w-6 h-6 cursor-pointer "
+                />
+              
+                <TrashIcon
+                  onClick={() => handleTeacherDelete(teacher.teacher_id)}
+                  className="text-red-700 w-6 h-6 cursor-pointer"
+                />
+              </div>
+            </li>
+          ))}
+      </ul>
+
       {teacherProfile && (
         <TeacherProfile
           teacherProfile={teacherProfile}

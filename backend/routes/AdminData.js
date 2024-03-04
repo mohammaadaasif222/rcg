@@ -700,7 +700,7 @@ router.post("/subject-sensecondary-info", async (req, res) => {
   try {
     const {
       class_name,
-      student_name,
+      subject_code,
       subject,
       examtype,
       adm_no,
@@ -742,7 +742,8 @@ router.post("/subject-sensecondary-info", async (req, res) => {
     };
 
     const totalTableName = `${class_name}_${section}_total`;
-    const subjectTableName = `${class_name}_${section}_${subject}`;
+    const subjectTableName = `${class_name}_${section}_${subject}_${subject_code}`;
+    
 
     //   // Check if subject table exists, if not, create it
     const subjectTableExistsQuery = `SHOW TABLES LIKE '${subjectTableName}'`;

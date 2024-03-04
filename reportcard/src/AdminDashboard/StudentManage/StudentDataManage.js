@@ -34,7 +34,7 @@ const StudentTable = ({ studentData, fetchStudentData, updateStudent }) => {
     "student_name",
     "gender",
     "date_of_birth",
-    "gurdian_name",
+    "father_name",
     "mother_name",
   ];
 

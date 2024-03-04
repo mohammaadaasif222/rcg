@@ -22,6 +22,7 @@ const SeniorSecondaryForm = () => {
 
   const initialValues = {
     class_name: "",
+    subject_code: "",
     student_name: "",
     subject: "",
     examtype: examtype,
@@ -45,6 +46,7 @@ const SeniorSecondaryForm = () => {
     class_name: Yup.string().required("Please Select the Class"),
     section: Yup.string().required("Please Select the Section"),
     subject: Yup.string().required("Please Select the Subject"),
+    subject_code: Yup.string().required("Subject code is required"),
     // examtype: Yup.string().required("Please Select the Exam type"),
 
     student_name: Yup.string().required(
@@ -169,6 +171,39 @@ const SeniorSecondaryForm = () => {
         </div>
       )}
       <form className="py-3" onSubmit={formik.handleSubmit}>
+        {selectedClassNumber >= 11 && (
+          <>
+            <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase text-start">
+              Information
+            </h6>
+            <div className="w-full lg:w-12/12 px-4">
+              <label
+                htmlFor="subject_code"
+                className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+              >
+                Subject Code*:
+              </label>
+              <input
+                type="text"
+                id="subject_code"
+                value={formik.values.subject_code}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
+                  formik.touched.subject_code && formik.errors.subject_code
+                    ? "border-red-500"
+                    : ""
+                }`}
+              />
+              {formik.touched.subject_code && formik.errors.subject_code && (
+                <p className="text-red-500 text-xs mt-1">
+                  {formik.errors.subject_code}
+                </p>
+              )}
+            </div>
+            <hr  className="mt-6 border-b-1 border-blueGray-300 pb-6"/>
+          </>
+        )}
         <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase text-start">
           Student Information
         </h6>

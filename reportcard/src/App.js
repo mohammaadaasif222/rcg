@@ -22,10 +22,25 @@ import ResetPassword from "./LoginPages/ResetPassword.js";
 import NotFound from "./Feature/NotFound.js";
 import StudentDataTable from "./StaffDashboard/StudentDataTable.js";
 import Nursery from './Forms/Nursery.js'
+import { useSelector } from "react-redux";
+import { useState,useEffect } from "react";
+
 
 function App() {
+  const [subjectCode, setSubjectCode]=useState(false)
+  const selectedVal = useSelector(
+    (state) => state.selectedValues.selectedValues
+  );
+  const selectedClassNumber = selectedVal[3];
   const includeSelect = true;
   const sectioncheck = true;
+  useEffect(() => {
+    if (selectedClassNumber > 10) {
+      setSubjectCode(true);
+    } else {
+      setSubjectCode(false);
+    }
+  }, [selectedClassNumber]);
   return (
     <Router>
       <Routes>
@@ -38,12 +53,12 @@ function App() {
         <Route path="/admindashboard/studentdata" element={<Layout includeSelect={includeSelect}><StudentDataManage /></Layout>} />
         <Route path="/admindashboard/teacherdata" element={<Layout><Teacher /></Layout>} />
         <Route path="/admindashboard/profile" element={<Layout><AdminProfile /></Layout>} />
-        <Route path="/staff/marks" element={<Layout includeSelect={includeSelect} sectioncheck={sectioncheck}><StudentMarks /></Layout>} />
+        <Route path="/staff/marks" element={<Layout includeSelect={includeSelect} sectioncheck={sectioncheck} ><StudentMarks /></Layout>} />
         <Route path="/staff/graph" element={<Layout includeSelect={includeSelect}><StudentDataGraph /></Layout>} />
         <Route path="/create-class" element={<Layout><CreateClass /></Layout>}/>
         <Route path="/create-teacher" element={<Layout><CreateTeacher /></Layout>}/>
         <Route path="/biodata" element={<Layout includeSelect={includeSelect}><BioData /></Layout>}/>
-        <Route path="/subject-marks" element={<Layout includeSelect={includeSelect} sectioncheck={sectioncheck}><SubjectMarks /></Layout>}/>
+        <Route path="/subject-marks" element={<Layout includeSelect={includeSelect} sectioncheck={sectioncheck} subjectCode={subjectCode}><SubjectMarks /></Layout>}/>
         <Route path="/editclasses" element={<Layout><EditClasses /></Layout>}/>
         <Route path="/Reportcard" element={<Layout includeSelect={includeSelect}><TotalMarks /></Layout>}/>
         <Route path="/StudentDataTable" element={<Layout includeSelect={includeSelect}><StudentDataTable /></Layout>}/>

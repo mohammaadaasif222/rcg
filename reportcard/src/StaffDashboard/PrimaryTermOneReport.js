@@ -105,7 +105,7 @@ const PrimaryTermOneReport = ({
                         <span className="w-32 font-semibold">
                           Father's Name:
                         </span>
-                        <span>{selectedStudent.gurdian_name}</span>
+                        <span>{selectedStudent.father_name}</span>
                       </li>
                       <li className="flex items-center mb-2">
                         <span className="w-32 font-semibold">

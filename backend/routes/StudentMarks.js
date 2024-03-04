@@ -3,22 +3,36 @@ const db = require("../connection");
 
 const router = express.Router();
 
-router.post("/marks", (req, res) => {
-  const { selectedClass, selectedSubject, selectedSection } = req.body;
-  let query;
-  let section = selectedSection.toLowerCase();
-  if (selectedClass && selectedSubject) {
-    query = `SELECT * FROM ${selectedClass}_${section}_biodata JOIN ${selectedClass}_${section}_${selectedSubject} on ${selectedClass}_${section}_biodata.adm_no = ${selectedClass}_${section}_${selectedSubject}.Adm_no   ;`;
-  }
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("MySQL query error:", err);
-      res.status(500).json({ message: "Internal Server Error" });
-    } else {
-      res.json(results);
+router.post("/marks", async (req, res) => {
+  try {
+    const { selectedClass, selectedSubject, selectedSection } = req.body;
+    
+    if (!selectedClass || !selectedSubject || !selectedSection) {
+      return res.status(400).json({ message: "Selected class, subject, and section are required." });
     }
-  });
+
+    let query;
+    const section = selectedSection.toLowerCase();
+    
+    query = `SELECT * FROM ${selectedClass}_${section}_biodata JOIN ${selectedClass}_${section}_${selectedSubject} on ${selectedClass}_${section}_biodata.adm_no = ${selectedClass}_${section}_${selectedSubject}.Adm_no;`;
+    
+    const results = await new Promise((resolve, reject) => {
+      db.query(query, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    res.json(results);
+  } catch (error) {
+    console.error("Error fetching marks:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
+
 router.put("/marks/:adm_no", (req, res) => {
   const {
     updatedStudentMarks,
@@ -275,37 +289,62 @@ router.get(
           res.status(500).json({ message: "Internal Server Error" });
         } else {
           const tableRows = results.map((result) => result.TABLE_NAME);
-        
-          if (tableRows && tableRows.length > 0 && !tableRows.includes('vocational')) {
-         
-            const queries = tableRows.slice(0, tableRows.length - 1).map(
-              (table) => `
-        SELECT
-          '${table}' AS subject,
-          ${table}.pen_paper_pt1,
-          ${table}.pen_paper_pt2,
-          ${table}.pen_paper_pt3,
-          ${table}.best_of_two,
-          ${table}.multiple_assessment,
-          ${table}.portfoilo,
-          ${table}.sub_enrich_act,
-          ${table}.annual_exam,
-          ${table}.grand_total,
-          ${table}.final_grade
-        FROM ${table}
-        WHERE ${table}.adm_no = ?
-      `
+          if (tableRows && tableRows.length > 0) {
+            const nonVocationalTables = tableRows.filter(table => !table.includes('vocational'));
+            const vocationalTables = tableRows.filter(table => table.includes('vocational'));
+          
+            const nonVocationalQueries = nonVocationalTables.map(table => `
+                SELECT
+                  '${table}' AS subject,
+                  pen_paper_pt1,
+                  pen_paper_pt2,
+                  pen_paper_pt3,
+                  best_of_two,
+                  multiple_assessment,
+                  portfoilo,
+                  sub_enrich_act,
+                  annual_exam,
+                  grand_total,
+                  final_grade,
+                  NULL AS theory_max,
+                  NULL AS theory_obtain,
+                  NULL AS practical_max,
+                  NULL AS practical_obtain
+                FROM ${table}
+                WHERE adm_no = ?
+            `);
+          
+            const vocationalQueries = vocationalTables.map(table => `
+                SELECT
+                  '${table}' AS subject,
+                  NULL AS pen_paper_pt1,
+                  NULL AS pen_paper_pt2,
+                  NULL AS pen_paper_pt3,
+                  NULL AS best_of_two,
+                  NULL AS multiple_assessment,
+                  NULL AS portfoilo,
+                  NULL AS sub_enrich_act,
+                  NULL AS annual_exam,
+                  NULL AS grand_total,
+                  NULL AS final_grade,
+                  theory_max,
+                  theory_obtain,
+                  practical_max,
+                  practical_obtain
+                FROM ${table}
+                WHERE adm_no = ?
+            `);
+          
+            const nonVocationalValues = nonVocationalTables.map(table =>
+              table === `${selectedClass}_${selectedSection}_biodata` ? [adm_no] : [adm_no]
             );
-
-            const values = tableRows.map((table) =>
-              table === `${selectedClass}_${selectedSection}_biodata`
-                ? [adm_no]
-                : [adm_no]
-            );
-
-            const query = queries.join(" UNION ALL ");
-
-            db.query(query, values.flat(), (err, results) => {
+          
+            const vocationalValues = vocationalTables.map(table => [adm_no]);
+          
+            const nonVocationalQuery = nonVocationalQueries.join(" UNION ALL ");
+            const vocationalQuery = vocationalQueries.join(" UNION ALL ");
+          
+            db.query(`${nonVocationalQuery} UNION ALL ${vocationalQuery}`, [...nonVocationalValues.flat(), ...vocationalValues.flat()], (err, results) => {
               if (err) {
                 console.error("MySQL query error:", err);
                 res.status(500).json({ error: "Internal Server Error" });
@@ -317,6 +356,7 @@ router.get(
             console.error("No eligible table names found.");
             res.status(404).json({ message: "No eligible table names found." });
           }
+          
         }
       });
     } catch (error) {
@@ -392,33 +432,6 @@ router.post("/vocational", (req, res) => {
         res.status(200).send("Data saved successfully");
       });
     });
-  });
-});
-
-router.get("/vocational/:section/:adm_no", (req, res) => {
-  const adm_no = req.params.adm_no;
-  const section = req.params.section;
-  const subject = req.params.subject;
-  const tableName = `ninth_${section}_vocational_physics`;
-
-  const selectQuery = `
-    SELECT * FROM ${tableName} WHERE adm_no = ?
-  `;
-
-  db.query(selectQuery, [adm_no], (err, rows) => {
-    if (err) {
-      console.error("Error retrieving data from MySQL:", err);
-      res.status(500).send("Error retrieving data");
-      return;
-    }
-
-    if (rows.length === 0) {
-      res.status(404).send("No data found for the provided admission number");
-      return;
-    }
-
-    // Data found, send it back in the response
-    res.status(200).json(rows[0]); // Assuming you want to send only the first row found
   });
 });
 

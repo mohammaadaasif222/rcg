@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchClasses, setSelectedValues } from "../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 
-const Select = ({ sectioncheck }) => {
+const Select = ({ sectioncheck, subjectCode }) => {
   const dispatch = useDispatch();
 
   const [selectedClass, setSelectedClass] = useState("");
@@ -107,7 +107,7 @@ const Select = ({ sectioncheck }) => {
     ];
     dispatch(setSelectedValues(newSelectedValues));
   }, [selectedClass, selectedSection, selectedSubject, dispatch]);
-  
+
   const uniqueClasses = Array.from(new Set(data.map((cls) => cls.class_name)));
 
   const classObject = data
@@ -119,7 +119,7 @@ const Select = ({ sectioncheck }) => {
 
   return (
     <div className="container mx-auto justify-right bg-white p-3 mt-2 mb-6 shadow-xl rounded-lg hidden md:block">
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 jus">
         <div>
           <label htmlFor="classSelect" className="block">
             Select Class:
@@ -128,13 +128,13 @@ const Select = ({ sectioncheck }) => {
             id="classSelect"
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
-            className="px-4 py-2 border rounded"
+            className="block py-2.5 px-2 w-full text-sm text-gray-500 bg-transparent rounded border-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
             style={{ width: "150px" }} // Set the desired width
           >
             <option value="">Select Class</option>
             {Object.entries(classObject).map(([className, classValue]) => (
               <option key={className} value={classValue}>
-                {className === '13' ? 'Nursery' : className}
+                {className === "13" ? "Nursery" : className}
               </option>
             ))}
           </select>
@@ -148,7 +148,7 @@ const Select = ({ sectioncheck }) => {
             id="sectionSelect"
             value={selectedSection}
             onChange={(e) => setSelectedSection(e.target.value)}
-            className="px-4 py-2 border rounded"
+            className="block py-2.5 px-2 w-full text-sm text-gray-500 bg-transparent rounded border-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
             style={{ width: "100px" }} // Set the desired width
           >
             {/* <option value="">Select Section</option> */}
@@ -159,28 +159,33 @@ const Select = ({ sectioncheck }) => {
             ))}
           </select>
         </div>
-        {sectioncheck && selectedClass && selectedClass !== 'nursery' && selectedClass !== 'ukg' && selectedClass !== 'lkg' && (
-          <div>
-            <label htmlFor="subjectSelect" className="block">
-              Select Subject:
-            </label>
-            <select
-              id="subjectSelect"
-              value={selectedSubject}
-              onChange={(e) => setSelectedSubject(e.target.value)}
-              className="px-4 py-2 border rounded"
-              style={{ width: "200px" }} // Set the desired width
-            >
-              <option value="">Select Subject</option>
-              {Array.isArray(subjects) &&
-                subjects.map((subject, index) => (
-                  <option key={`${selectedClass}-${index}`} value={subject}>
-                    {subject}
-                  </option>
-                ))}
-            </select>
-          </div>
-        )}
+        {sectioncheck &&
+          selectedClass &&
+          selectedClass !== "nursery" &&
+          selectedClass !== "ukg" &&
+          selectedClass !== "lkg" && (
+            <div>
+              <label htmlFor="subjectSelect" className="block">
+                Select Subject:
+              </label>
+              <select
+                id="subjectSelect"
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                className="block py-2.5 px-2 w-full text-sm text-gray-500 bg-transparent rounded border-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                style={{ width: "200px" }} // Set the desired width
+              >
+                <option value="">Select Subject</option>
+                {Array.isArray(subjects) &&
+                  subjects.map((subject, index) => (
+                    <option key={`${selectedClass}-${index}`} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
+
       </div>
     </div>
   );

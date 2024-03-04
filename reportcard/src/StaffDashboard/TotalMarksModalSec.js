@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReportCardTwo from "./ReportcardTwo";
-import {URL} from '../URL'
+import { URL } from "../URL";
 
 import axios from "axios";
 
@@ -29,7 +29,6 @@ const TotalMarksModalSec = ({
           "t1_scholastic_art",
           "t1_scholastic_health",
           "t1_scholastic_workeducation",
-          
         ].includes(key)
     )
     .map((key) => key.slice(3));
@@ -50,18 +49,16 @@ const TotalMarksModalSec = ({
       ].includes(key)
   );
 
-
-
   const tab2Columns = [
-"t1_scholastic_art",
-"t1_scholastic_computer",
-"t1_scholastic_deciplin",
-"t1_scholastic_drawing",
-"t1_scholastic_entry",
-"t1_scholastic_gk",
-"t1_scholastic_health",
-"t1_scholastic_remark",
-"t1_scholastic_workeducation",
+    "t1_scholastic_art",
+    "t1_scholastic_computer",
+    "t1_scholastic_deciplin",
+    "t1_scholastic_drawing",
+    "t1_scholastic_entry",
+    "t1_scholastic_gk",
+    "t1_scholastic_health",
+    "t1_scholastic_remark",
+    "t1_scholastic_workeducation",
   ];
   const tab2heading = [
     "scholastic art",
@@ -75,10 +72,9 @@ const TotalMarksModalSec = ({
     "scholastic workeducation",
   ];
 
-
   const handleReportCardClick = async (adm_no) => {
     try {
-        const Section=selectedSection.toLowerCase()
+      const Section = selectedSection.toLowerCase();
       const apiUrl = `${URL}/student/reportcardtwo/${selectedClass}/${Section}/${selectedStudent.adm_no}`;
       const response = await axios.get(apiUrl);
       console.log(response.data);
@@ -96,7 +92,7 @@ const TotalMarksModalSec = ({
       console.error("Invalid data format. Expected an array.");
       return null;
     }
-console.log(selectedClass);
+    console.log(selectedClass);
     return (
       <div>
         <table className="w-full text-sm text-center text-gray-900 shadow-xl rounded-lg">
@@ -131,7 +127,8 @@ console.log(selectedClass);
       </div>
     );
   };
-  console.log(reportCardData,data)
+
+
   return (
     <>
       <div className="modal-overlay">
@@ -163,24 +160,21 @@ console.log(selectedClass);
                 onClick={() => setActiveTab(2)}
               >
                 scholastic
-              </button>             
+              </button>
             </div>
             {activeTab === 1 && renderTable(data, tab1, tabheading)}
             {activeTab === 2 && renderTable(data, tab2Columns, tab2heading)}
-            
           </div>
         </div>
       </div>
       {reportCardData && (
         <>
-     
-                  <ReportCardTwo
-                    data={data}
-                    selectedStudent={selectedStudent}
-                    reportCardData={reportCardData}
-                    closeReportCardModal={closeReportCardModal}
-                  />
-              
+          <ReportCardTwo
+            data={data}
+            selectedStudent={selectedStudent}
+            reportCardData={reportCardData}
+            closeReportCardModal={closeReportCardModal}
+          />
         </>
       )}
     </>

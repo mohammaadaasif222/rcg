@@ -150,7 +150,7 @@ const ReportCardThree = ({
                         <span className="w-32 font-semibold">
                           Father's Name:
                         </span>
-                        <span>{selectedStudent.gurdian_name}</span>
+                        <span>{selectedStudent.father_name}</span>
                       </li>
                       <li className="flex items-center mb-2">
                         <span className="w-32 font-semibold">
@@ -213,8 +213,8 @@ const ReportCardThree = ({
                   <tbody className="capitalize ">
                     {reportCardData.map((dataRow, index) => (
                       <tr className="capitalize myborder" key={index}>
-                        <td>01</td>
-                        <td colSpan={3}>{dataRow.subject.split("_")[2]} {dataRow.subject.split("_")[3]}</td>
+                        <td className="uppercase">{dataRow.subject.split("_")[3]}</td>
+                        <td colSpan={3}>{dataRow.subject.split("_")[2]} </td>
                        
                         <td>{dataRow.theory_max}</td>
                         <td>{dataRow.theory_obtain}</td>

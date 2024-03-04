@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import schoollogo from "./schoollogo.png";
-import { useSelector } from "react-redux";
-import { URL } from "../URL";
+
 const ReportCardTwo = ({
   data,
   selectedStudent,
   reportCardData,
   closeReportCardModal,
+ 
 }) => {
-  const selectedVal = useSelector(
-    (state) => state.selectedValues.selectedValues
-  );
-
-  const selectedSection = selectedVal[1];
-  const selectedSubject = selectedVal[2];
 
   const handlePrint = () => {
     var printContents = document.getElementById("printable-content").innerHTML;
@@ -22,29 +16,14 @@ const ReportCardTwo = ({
     window.document.close();
   };
 
-  const [vocationalData, setVocational] = useState("");
   const dateone = Date.now();
   const currentDate = new Date(dateone);
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1;
   const year = currentDate.getFullYear();
- console.log(selectedVal)
+
   const formattedDate = `${day}/${month}/${year}`;
-  const fetchVocationalData = async () => {
-    try {
-      const response = await fetch(
-        `${URL}/student/vocational/${selectedSection}/${selectedStudent.adm_no}`
-      );
-      const data = await response.json();
-      setVocational(data)
-      console.log('from two',data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchVocationalData();
-  }, []);
+
   const calculateOverallTotal = () => {
     let overallTotal = 0;
     let totalOutOf = 0;
@@ -77,7 +56,8 @@ const ReportCardTwo = ({
     };
   };
   const overallData = calculateOverallTotal();
-
+//  console.log('reportCrdtwo', reportCardData)
+ const vocational = reportCardData?.find(obj => obj.subject.includes('vocational'));
   return (
     <>
       <div className="modal-overlay">
@@ -166,7 +146,7 @@ const ReportCardTwo = ({
                         <span className="w-32 font-semibold">
                           Father's Name:
                         </span>
-                        <span>{selectedStudent.gurdian_name}</span>
+                        <span>{selectedStudent.father_name}</span>
                       </li>
                       <li className="flex items-center mb-2">
                         <span className="w-32 font-semibold">
@@ -289,10 +269,10 @@ const ReportCardTwo = ({
                       <td colSpan="4" rowSpan="2">
                         VACATIONAL SUBJECT (IF ANY)
                       </td>
-                      <td colSpan="4"> {vocationalData.theory_max} </td>
-                      <td colSpan="4"> {vocationalData.theory_obtain} </td>
-                      <td colSpan="4"> {vocationalData.practical_max} </td>
-                      <td colSpan="4"> {vocationalData.practical_obtain} </td>
+                      <td colSpan="4"> {vocational?.theory_max} </td>
+                      <td colSpan="4"> {vocational?.theory_obtain} </td>
+                      <td colSpan="4"> {vocational?.practical_max} </td>
+                      <td colSpan="4"> {vocational?.practical_obtain} </td>
                     
                       
                     </tr>
