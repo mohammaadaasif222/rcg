@@ -1,0 +1,6 @@
+adm_no,Roll_No,student_name,date_of_birth,father_name,mother_name,phone,gender,address,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+5193A,1,Abhinav Singh,09/03/2011,Ravinder Singh,Parbha Devi,"9888118950, 7355347892",Male,"# 38C, Raipur Khurd, Chandigarh ",,,,,,,,,,,,,,,,,,,
+2226A,2,Akshita,13/06/2010,Girdhari Lal Singhal,Neeru Singhal,"9216222240, 9216222242",Female,"# 576, Ph-II,Ramdarbar Colony ",,,,,,,,,,,,,,,,,,,
+4297A,3,Amanat Kaur,02/07/2010,Kuldip Singh,Sarbjit Kaur,"7508369829, 9779260111",Female,"# 578, Ph-2, Ramdarbar ",,,,,,,,,,,,,,,,,,,
+5186A,4,Ananya,28/01/2011,Dinesh,Sushma,"7009344395, 7527007803",Female,"# 1673, Sector-29B, Chandigarh ",,,,,,,,,,,,,,,,,,,
+2756A,5,Anshuman,21/10/2009,Sandeep,Reena,8054589919,Male,"# 331, Village Daria ",,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,6 @@
+adm_no,Roll_No,student_name,date_of_birth,father_name,mother_name,phone,gender,address,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+2490A,16,Kajal Bhardwaj,21/08/2009,Sushil Kumar,Poonam,8283844974,FEMALE,"# 810, Hallomajra ",,,,,,,,,,,,,,,,,,,
+5195A,17,Knishka,03/08/2010,Bhagwan Das,Manisha,9501060630,FEMALE,"# 69, Ph-I, Bapu Dham Colony, Sector-26, Chandigarh ",,,,,,,,,,,,,,,,,,,
+1811,18,Manjot,05/02/2010,Brij Mohan,Baljit Kaur,2603721,FEMALE,"# 2648, Sector-20C, Chandigarh ",,,,,,,,,,,,,,,,,,,
+4619A,19,Mohit,21/05/2010,Dungar Singh,Geeta,9815303058,MALE,"# 511, Hallomajra ",,,,,,,,,,,,,,,,,,,
+4635A,20,Muskan,17/12/2009,Gopal Tamang,Shobha,8727083764,FEMALE,"Plot No. 27/8, Indl. Area, Phase-2,Chandigarh",,,,,,,,,,,,,,,,,,,

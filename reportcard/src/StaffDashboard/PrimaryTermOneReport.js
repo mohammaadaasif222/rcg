@@ -20,6 +20,30 @@ const PrimaryTermOneReport = ({
   const formattedDate = `${day}/${month}/${year}`;
 
 
+  function convertToGrade(mark) {
+    if (mark >= 9) return 'A';
+    if (mark >= 7) return 'B';
+    if (mark >= 5) return 'C';
+    if (mark >= 3) return 'D';
+    return 'E';
+}
+
+// Array of objects with marks
+
+
+// Iterate over each object and convert marks to grades
+const newData = data.map(obj => {
+    const newObj = {};
+    Object.keys(obj).forEach(key => {
+        // Check if the key represents marks (assuming marks are numeric)
+        if (!isNaN(obj[key])) {
+            newObj[key] = convertToGrade(parseInt(obj[key]));
+        } else {
+            newObj[key] = obj[key]; // Preserve non-marks properties as is
+        }
+    });
+    return newObj;
+});
   return (
     <>
       <div className="modal-overlay">
@@ -168,20 +192,20 @@ const PrimaryTermOneReport = ({
                         Reading Skill
                       </td>
                       <td colSpan={1}> Pronunciation</td>
-                      <td colSpan="1">{data[0].t1_english_pronunciation}</td>
+                      <td colSpan="1">{newData[1].t1_english_pronunciation}</td>
 
-                      <td colSpan="1">{data[0].t1_punjabi_pronunciation}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_pronunciation}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1}> Fluency</td>
-                      <td colSpan="1">{data[0].t1_english_fluency}</td>
+                      <td colSpan="1">{newData[1].t1_english_fluency}</td>
 
-                      <td colSpan="1">{data[0].t1_punjabi_fluency}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_fluency}</td>
                     </tr>
                     <tr>
                       <td colSpan="1"> Comprehensive </td>
-                      <td colSpan="1">{data[0].t1_english_comprehension}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_comprehension}</td>
+                      <td colSpan="1">{newData[1].t1_english_comprehension}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_comprehension}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1} rowSpan={5}>
@@ -189,28 +213,28 @@ const PrimaryTermOneReport = ({
                         Writing Skill
                       </td>
                       <td colSpan={1}> Creative Writing</td>
-                      <td colSpan="1">{data[0].t1_english_creative_writing}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_creative_writing}</td>
+                      <td colSpan="1">{newData[1].t1_english_creative_writing}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_creative_writing}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1}> Handwriting</td>
-                      <td colSpan="1">{data[0].t1_english_handwriting}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_handwriting}</td>
+                      <td colSpan="1">{newData[1].t1_english_handwriting}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_handwriting}</td>
                     </tr>
                     <tr>
                       <td colSpan="1"> Grammar </td>
-                      <td colSpan="1">{data[0].t1_english_grammar}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_grammar}</td>
+                      <td colSpan="1">{newData[1].t1_english_grammar}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_grammar}</td>
                     </tr>
                     <tr>
                       <td colSpan="1"> Spellings </td>
-                      <td colSpan="1">{data[0].t1_english_spelling}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_spelling}</td>
+                      <td colSpan="1">{newData[1].t1_english_spelling}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_spelling}</td>
                     </tr>{" "}
                     <tr>
                       <td colSpan="1"> Vocabulary </td>
-                      <td colSpan="1">{data[0].t1_english_vocabulary}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_vocabulary}</td>
+                      <td colSpan="1">{newData[1].t1_english_vocabulary}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_vocabulary}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1} rowSpan={2}>
@@ -218,13 +242,13 @@ const PrimaryTermOneReport = ({
                         Speaking Skill
                       </td>
                       <td colSpan={1}> Conversation</td>
-                      <td colSpan="1">{data[0].t1_english_conversation}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_conversation}</td>
+                      <td colSpan="1">{newData[1].t1_english_conversation}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_conversation}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1}> Recitation</td>
-                      <td colSpan="1">{data[0].t1_english_recitation}</td>
-                      <td colSpan="1">{data[0].t1_punjabi_recitation}</td>
+                      <td colSpan="1">{newData[1].t1_english_recitation}</td>
+                      <td colSpan="1">{newData[4].t1_punjabi_recitation}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1} rowSpan={1}>
@@ -233,11 +257,11 @@ const PrimaryTermOneReport = ({
                       </td>
                       <td colSpan={1}> Comprehensive</td>
                       <td colSpan="1">
-                        {data[0].t1_english_listening_comprehension}
+                        {newData[1].t1_english_listening_comprehension}
                       </td>
                  
                       <td colSpan="1">
-                        {data[0].t1_punjabi_listening_comprehension}
+                        {newData[4].t1_punjabi_listening_comprehension}
                       </td>
                   
                     </tr>
@@ -286,27 +310,27 @@ const PrimaryTermOneReport = ({
                   <tbody className="capitalize ">
                     <tr className="capitalize myborder">
                       <td colSpan={1}> Concept</td>
-                      <td colSpan="1">{data[0].t1_mathematics_concept}</td>
+                      <td colSpan="1">{newData[3].t1_mathematics_concept}</td>
                       <td colSpan={1}> Enthusiasm</td>
-                      <td colSpan="1">{data[0].t1_games_enthusiasm}</td>
+                      <td colSpan="1">{newData[2].t1_games_enthusiasm}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1}> Activity</td>
-                      <td colSpan="1">{data[0].t1_mathematics_activity}</td>
+                      <td colSpan="1">{newData[3].t1_mathematics_activity}</td>
                       <td colSpan={1}> Discipline</td>
-                      <td colSpan="1">{data[0].t1_games_discipline}</td>
+                      <td colSpan="1">{newData[2].t1_games_discipline}</td>
                     </tr>
                     <tr>
                       <td colSpan="1"> Tables </td>
-                      <td colSpan="1">{data[0].t1_mathematics_tables}</td>
+                      <td colSpan="1">{newData[3].t1_mathematics_tables}</td>
                       <td colSpan="1"> Team-Spirit </td>
-                      <td colSpan="1">{data[0].t1_games_team_spirit}</td>
+                      <td colSpan="1">{newData[2].t1_games_team_spirit}</td>
                     </tr>
                     <tr>
                       <td colSpan="1"> Mental Ability </td>
-                      <td colSpan="1">{data[0].t1_mathematics_mental_ability}</td>
+                      <td colSpan="1">{newData[3].t1_mathematics_mental_ability}</td>
                       <td colSpan="1"> Talent </td>
-                      <td colSpan="1">{data[0].t1_games_talent}</td>
+                      <td colSpan="1">{newData[2].t1_games_talent}</td>
                     </tr>
                    
                   </tbody>
@@ -340,15 +364,15 @@ const PrimaryTermOneReport = ({
                     <tr className="capitalize myborder">
                     
                       <td colSpan={2}> Environmental Sensitivity</td>
-                      <td colSpan="2">{data[0].t1_health_environment}</td>
+                      <td colSpan="2">{newData[2].t1_health_environment}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={2}> Activity / Project</td>
-                      <td colSpan="2">{data[0].t1_health_activity}</td>
+                      <td colSpan="2">{newData[2].t1_health_activity}</td>
                     </tr>
                     <tr>
                       <td colSpan="2"> Group Discussion </td>
-                      <td colSpan="2">{data[0].t1_health_group_discussion}</td>
+                      <td colSpan="2">{newData[2].t1_health_group_discussion}</td>
                     </tr>
                     
                    
@@ -397,21 +421,21 @@ const PrimaryTermOneReport = ({
                   <tbody className="capitalize ">
                     <tr className="capitalize myborder">
                       <td colSpan={1}> Interest</td>
-                      <td colSpan="1">{data[0].t1_art_interest}</td>
+                      <td colSpan="1">{newData[0].t1_art_interest}</td>
                       <td colSpan={1}> Interest</td>
-                      <td colSpan="1">{data[0].t1_music_interest}</td>
+                      <td colSpan="1">{newData[0].t1_music_interest}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={1}> Creativity</td>
-                      <td colSpan="1">{data[0].t1_art_creativity}</td>
+                      <td colSpan="1">{newData[0].t1_art_creativity}</td>
                       <td colSpan={1}> Rhythm</td>
-                      <td colSpan="1">{data[0].t1_music_rhythm}</td>
+                      <td colSpan="1">{newData[0].t1_music_rhythm}</td>
                     </tr>
                     <tr>
                       <td colSpan="1"> Skill </td>
-                      <td colSpan="1">{data[0].t1_art_skill}</td>
+                      <td colSpan="1">{newData[0].t1_art_skill}</td>
                       <td colSpan="1"> Melody </td>
-                      <td colSpan="1">{data[0].t1_music_melody}</td>
+                      <td colSpan="1">{newData[0].t1_music_melody}</td>
                     </tr>
                     
                   </tbody>
@@ -454,27 +478,27 @@ const PrimaryTermOneReport = ({
                   <tbody className="capitalize ">
                     <tr className="capitalize myborder">
                       <td colSpan={2}> Courteousness</td>
-                      <td colSpan="1">{data[0].t1_personality_courteousness}</td>
+                      <td colSpan="1">{newData[0].t1_personality_courteousness}</td>
                       <td colSpan={2}> Confidence</td>
-                      <td colSpan="1">{data[0].t1_personality_confidence}</td>
+                      <td colSpan="1">{newData[0].t1_personality_confidence}</td>
                     </tr>
                     <tr className="capitalize myborder">
                       <td colSpan={2}> Care of Belongings</td>
-                      <td colSpan="1">{data[0].t1_personality_care_of_belonging}</td>
+                      <td colSpan="1">{newData[0].t1_personality_care_of_belonging}</td>
                       <td colSpan={2}> Neatness</td>
-                      <td colSpan="1">{data[0].t1_personality_neatness}</td>
+                      <td colSpan="1">{newData[0].t1_personality_neatness}</td>
                     </tr>
                     <tr>
                       <td colSpan="2"> Regularity and Punctuality </td>
-                      <td colSpan="1">{data[0].t1_personality_regularity}</td>
+                      <td colSpan="1">{newData[0].t1_personality_regularity}</td>
                       <td colSpan="2"> Initiative </td>
-                      <td colSpan="1">{data[0].t1_personality_initiative}</td>
+                      <td colSpan="1">{newData[0].t1_personality_initiative}</td>
                     </tr>
                     <tr>
                       <td colSpan="2"> Self-Control </td>
-                      <td colSpan="1">{data[0].t1_personality_self_control}</td>
+                      <td colSpan="1">{newData[0].t1_personality_self_control}</td>
                       <td colSpan="2"> Sharing And Caring </td>
-                      <td colSpan="1">{data[0].t1_personality_sharing}</td>
+                      <td colSpan="1">{newData[0].t1_personality_sharing}</td>
                     </tr>
                     
                   </tbody>
@@ -490,7 +514,7 @@ const PrimaryTermOneReport = ({
                       </td>
 
                       <td colSpan="1" className="noborder">
-                        ok{data[0].t1_remark}
+                        ok{newData[0].t1_remark}
                       </td>
 
                     </tr>

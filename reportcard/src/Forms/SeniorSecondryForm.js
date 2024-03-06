@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios"; // Removed unused import
+import axios from "axios"; 
 import { useSelector } from "react-redux";
 import { URL } from "../URL";
 const SeniorSecondaryForm = () => {
@@ -49,10 +49,10 @@ const SeniorSecondaryForm = () => {
     subject_code: Yup.string().required("Subject code is required"),
     // examtype: Yup.string().required("Please Select the Exam type"),
 
-    student_name: Yup.string().required(
-      "Please Select from suggestion the Subject"
-    ),
-    adm_no: Yup.string().required("Please Enter Admission number"),
+    // student_name: Yup.string().required(
+      // "Please Select from suggestion the Subject"
+    // ),
+    // adm_no: Yup.string().required("Please Enter Admission number"),
   });
 
   const handleStudent = (studentdata) => {

@@ -164,13 +164,17 @@ export default function CreateClass() {
                         <option disabled selected value="">
                           choose an option
                         </option>
-                        <option value="nursery_13">Nursery</option>
-                        <option value="prenursery_14">Pre Nursery</option>
+                        <option value="prenursery_15">Pre Nursery</option>
+                        <option value="nursery_14">Nursery</option>
+                        <option value="kg_13">KG</option>
                         <option value="first_1">1</option>
                         <option value="second_2">2</option>
                         <option value="third_3">3</option>
                         <option value="fourth_4">4</option>
                         <option value="fifth_5">5</option>  
+                        <option value="sixth_6">6</option>  
+                        <option value="seventh_7">7</option>  
+                        <option value="eighth_8">8</option>  
                         <option value="ninth_9">9</option>
                         <option value="ten_10">10</option>
                         <option value="eleven_11">11</option>

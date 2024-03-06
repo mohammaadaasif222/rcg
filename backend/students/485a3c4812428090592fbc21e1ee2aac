@@ -1,0 +1,6 @@
+adm_no,Roll_No,student_name,date_of_birth,father_name,mother_name,phone,gender,address,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+4685A,1,Arjun,17/08/2009,Rakesh,Aarti,9915364544,Male,"#180, Phae-1, Bapu Dham ColonySector- 26, CHD",,,,,,,,,,,,,,,,,,,
+3670A,2,Garima Sulania,02/06/2010,Kishan Kumar,Amita,9878165818,Female,"# 103, PH-II,Ram Darbar ",,,,,,,,,,,,,,,,,,,
+5209A,3,Gaurav,19/08/2010,Manoj Kumar,Neelam,9876490531,Male,"# 1595/1, Sector-30B, Chandigarh ",,,,,,,,,,,,,,,,,,,
+5156A,4,Gurkirat Kaur,21/01/2011,Harminder Singh,Jaswinder Kaur,8437487616,Female,"# Vill. Bhabat, Near Zirakpur ",,,,,,,,,,,,,,,,,,,
+4300A,5,Himanshu Chauhan,28/01/2011,Rahul,Santosh,9814156634,Male,"# 203, Ph-II, Ramdarbar, Chandigarh ",,,,,,,,,,,,,,,,,,,

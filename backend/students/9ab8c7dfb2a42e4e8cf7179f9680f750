@@ -1,0 +1,6 @@
+adm_no,Roll_No,student_name,date_of_birth,father_name,mother_name,phone,gender,address,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+4174A,1,Prachi,15-05-2009,Sukhdev,Meera,9915492990,Female,"# 550, Ph-II, Ramdarbar ",20,20,30,30,50,6,6,6,II,OBC,sgc,bpl,no,yes,Hindu,BPL,12-11-2011,ok,ok
+2375A,2,Ravi Yadav,08-08-2008,Lalan Yadav,Asha,9878815895,Male,"#161A, C.No-4, , Chandigarh ",20,30,120,30,60,6,6,6,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+2962A,3,Sakshi,25-11-2009,Santosh Singh,Mala Devi,9779980443,Female,"# 256, Near Balmiki Mandire, Hallomajra ",,,,,,,,,,,,,,,,,,,
+5208A,4,Sakshi,11-04-2010,Vinod Kansal,Kajal Kansal,9023248241,Female,"# 48, Main Road, Govind Vihar, Baltana ",,,,,,,,,,,,,,,,,,,
+4296A,5,Sameer,25-07-2009,Surender Pal,Shabnam,8728087846,Male,"# 1363/1, Sector-30B, Chandigarh ",,,,,,,,,,,,,,,,,,,

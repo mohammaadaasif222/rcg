@@ -109,6 +109,7 @@ export const fetchStudentMarks = (selectedClass, selectedSubject,selectedSection
         selectedSubject,
         selectedSection: section,
       });
+     
       dispatch(fetchStudentMarksSuccess(response.data));
     } catch (error) {
       dispatch(fetchStudentMarksFailure(error.message));

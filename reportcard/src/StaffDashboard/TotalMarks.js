@@ -124,8 +124,8 @@ const TotalMarks = ({ studentData, fetchStudentData }) => {
                 ))}
                 <td className="border border-gray-400 py-2 px-4">
                   {selectedClass === "nursery" ||
-                  selectedClass === "ukg" ||
-                  selectedClass === "lkg" ? (
+                  selectedClass === "kg" ||
+                  selectedClass === "prenursery" ? (
                     <>
                       <button
                         onClick={() => handlePrimaryReportClick(student.adm_no,1)}

@@ -33,8 +33,8 @@ const ReportCardThree = ({
       const practical_max = reportCard.practical_max || 1;
 
       // Calculate the total and total outOf for each report card
-      const total = theory_obtain + practical_obtain;
-      const totalOutOfLocal = theory_max + practical_max;
+      const total = parseInt(theory_obtain) + parseInt(practical_obtain);
+      const totalOutOfLocal = parseInt(theory_max) + parseInt(practical_max);
 
       // Add to overallTotal and totalOutOf
       overallTotal += total;
@@ -42,7 +42,7 @@ const ReportCardThree = ({
     });
 
     // Calculate percentage
-    const percentage = (overallTotal / totalOutOf) * 100;
+    const percentage = ((overallTotal / totalOutOf) * 100).toFixed(2);
 
     // Generate grade
     let grade;
@@ -59,6 +59,7 @@ const ReportCardThree = ({
     }
 
     return {
+      totalOutOf,
       overallTotal,
       percentage,
       grade,
@@ -222,19 +223,19 @@ const ReportCardThree = ({
                         <td>{dataRow.practical_max}</td>
                         <td>{dataRow.practical_obtain}</td>
                         
-                        <td>{ dataRow.theory_max +
-                            dataRow.practical_max}</td>
+                        <td>{ parseInt(dataRow.theory_max) +
+                            parseInt(dataRow.practical_max)}</td>
                         <td>
                           {
-                            dataRow.theory_obtain +
-                            dataRow.practical_obtain}
+                            parseInt(dataRow.theory_obtain) +
+                            parseInt(dataRow.practical_obtain)}
                         </td>
                       </tr>
                     ))}
                     <tr>
-                    <td colSpan="2"> overall Out of :  {overallData.overallTotal} </td>
+                    <td colSpan="2"> overall Out of :  {overallData.totalOutOf} </td>
                       <td colSpan="2">OVER ALL MARKS :  {overallData.overallTotal} </td>
-                      <td colSpan="3">OVER ALL MARKS(%):{overallData.percentage.toFixed(2)}% </td>
+                      <td colSpan="3">OVER ALL MARKS(%):{overallData.percentage}% </td>
                       <td colSpan="3">OVER ALL GRADE: {overallData.grade}</td>
                     </tr>
                     <tr></tr>

@@ -12,7 +12,7 @@ const ReportCard = ({
     window.print();
     window.document.close();
   };
-
+  console.log(reportCardData)
   const dateone = Date.now();
   const currentDate = new Date(dateone);
   const day = currentDate.getDate();
@@ -28,16 +28,16 @@ const ReportCard = ({
     reportCardData.map((reportCard) => {
       const obtain = reportCard.total_marks_term_1 || 0;
       const obtain2 = reportCard.marks_obtained || 0;
-      const total = obtain;
-      const total2 = obtain2;
+      const total =parseInt(obtain);
+      const total2 = parseInt(obtain2);
       const totalOutOfLocal = 100;
       t1_overallTotal += total;
       t2_overallTotal += total2;
       totalOutOf += totalOutOfLocal;
     });
 
-    const t1_percentage = (t1_overallTotal / totalOutOf) * 100;
-    const t2_percentage = (t2_overallTotal / totalOutOf) * 100;
+    const t1_percentage = ((t1_overallTotal / totalOutOf) * 100).toFixed(2);
+    const t2_percentage = ((t2_overallTotal / totalOutOf) * 100).toFixed(2);
 
     let t1_grade;
     if (t1_percentage >= 90) {
@@ -66,6 +66,7 @@ const ReportCard = ({
     }
 
     return {
+      totalOutOf,
       t1_overallTotal,
       t1_percentage,
       t1_grade,
@@ -251,13 +252,13 @@ const ReportCard = ({
                     ))}
 
                     <tr>
-                      <td>Term-1 Max : 500</td>
+                      <td>Term-1 Max :  {overallData.totalOutOf}</td>
                       <td colSpan="2">
                         Term-1 Obitained : {overallData.t1_overallTotal}{" "}
                       </td>
                       <td>Term-1 % : {overallData.t1_percentage}</td>
                       <td colSpan="2">Term-1 Grade : {overallData.t1_grade}</td>
-                      <td colSpan="2">Term-2 Max : 500 </td>
+                      <td colSpan="2">Term-2 Max : {overallData.totalOutOf} </td>
                       <td colSpan="2">
                         Term-2 Obitained: {overallData.t2_overallTotal}
                       </td>

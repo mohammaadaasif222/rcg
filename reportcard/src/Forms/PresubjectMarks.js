@@ -30,18 +30,8 @@ const SubjectMarks = () => {
       const formData = new FormData();
       formData.append("file", csvFile);
       formData.append("class_name", selectedClass);
-      formData.append("section_name", selectedSection);
-      if(selectedClassNumber >10){
-      formData.append("subject_code", subjectCode);
-      }
-      if(checked){
-        formData.append("subject_name", 'vocational_'+selectedSubject);
-      }else{
-        formData.append("subject_name", selectedSubject);
-      }
-
-      // Append other form data as needed
-      const response = await axios.post(`${URL}/admin/upload/marks`, formData, {
+   
+      const response = await axios.post(`${URL}/admin/upload/premarks`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

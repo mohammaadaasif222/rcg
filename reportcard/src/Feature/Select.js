@@ -117,6 +117,7 @@ const Select = ({ sectioncheck, subjectCode }) => {
       return acc;
     }, {});
 
+
   return (
     <div className="container mx-auto justify-right bg-white p-3 mt-2 mb-6 shadow-xl rounded-lg hidden md:block">
       <div className="flex items-center space-x-4 jus">
@@ -134,7 +135,7 @@ const Select = ({ sectioncheck, subjectCode }) => {
             <option value="">Select Class</option>
             {Object.entries(classObject).map(([className, classValue]) => (
               <option key={className} value={classValue}>
-                {className === "13" ? "Nursery" : className}
+                {className}
               </option>
             ))}
           </select>

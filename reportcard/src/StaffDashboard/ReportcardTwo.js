@@ -35,7 +35,7 @@ const ReportCardTwo = ({
       totalOutOf += totalOutOfLocal;
     });
 
-    const percentage = (overallTotal / totalOutOf) * 100;
+    const percentage = ((overallTotal / totalOutOf) * 100).toFixed(2);
     let grade;
     if (percentage >= 90) {
       grade = "A";
@@ -50,6 +50,7 @@ const ReportCardTwo = ({
     }
 
     return {
+      totalOutOf,
       overallTotal,
       percentage,
       grade,
@@ -244,7 +245,7 @@ const ReportCardTwo = ({
                     </tr>
                   </thead>
                   <tbody className="capitalize ">
-                    {reportCardData.map((dataRow, index) => (
+                    {reportCardData.filter((item)=> !item.subject.includes('vocational')).map((dataRow, index) => (
                       <tr className="capitalize myborder" key={index}>
                         <td>{dataRow.subject.split("_")[2]}</td>
                         <td>{dataRow.pen_paper_pt1}</td>
@@ -268,19 +269,19 @@ const ReportCardTwo = ({
                     <tr className="capitalize text-center myborder">
                       <td colSpan="4" rowSpan="2">
                         VACATIONAL SUBJECT (IF ANY)
-                      </td>
-                      <td colSpan="4"> {vocational?.theory_max} </td>
-                      <td colSpan="4"> {vocational?.theory_obtain} </td>
-                      <td colSpan="4"> {vocational?.practical_max} </td>
-                      <td colSpan="4"> {vocational?.practical_obtain} </td>
+                      </td> <td colSpan="4">Theory max </td>
+                      <td colSpan="4"> Theory Obtain </td>
+                      <td colSpan="4"> practicle Max </td>
+                      <td colSpan="4"> Practicle Obtain </td>
+                     
                     
                       
                     </tr>
                     <tr className="capitalize text-center myborder">
-                      <td colSpan="4"> </td>
-                      <td colSpan="4"> </td>
-                      <td colSpan="4"> </td>
-                      <td colSpan="4"> </td>
+                    <td colSpan="4"> {vocational?.theory_max} </td>
+                      <td colSpan="4"> {vocational?.theory_obtain} </td>
+                      <td colSpan="4"> {vocational?.practical_max} </td>
+                      <td colSpan="4"> {vocational?.practical_obtain} </td>
                     </tr>
                     <tr>
                       <td colSpan="5"> </td>

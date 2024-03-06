@@ -1,0 +1,6 @@
+adm_no,Roll_No,student_name,date_of_birth,father_name,mother_name,phone,gender,address,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+2790A,11,Ishaan Singh,27/09/2009,Balbir Singh,Dimple,9878887339,Male,"# 1068, Deep Complex, Hallomjra ",,,,,,,,,,,,,,,,,,,
+2416A,12,Iqra Khan,12/01/2011,Shakeel Ahmad Khan,Aameena Khan,9023135131,Female,"# 1247/1, Sector-30B, Chandigarh ",,,,,,,,,,,,,,,,,,,
+1846,13,Japjot Singh,03/04/2009,Gurpreet Singh,Sukhdeep Kaur,7508658200,Male,"# 1248, Ph- II,Ramdarbar ",,,,,,,,,,,,,,,,,,,
+2938A,14,Jasmine Chouhan,02/04/2010,Dushant,Sonia,9779803156,Female,"#1062/1, Hallomajra ",,,,,,,,,,,,,,,,,,,
+5232A,15,Jatin Alias Jaitan,12/11/2010,Ravinder Kumar,Sapna,9780369652,Male,"# 1933, Phase-II, Ramdarbar ",,,,,,,,,,,,,,,,,,,

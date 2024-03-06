@@ -1,0 +1,6 @@
+adm_no,Roll_No,student_name,date_of_birth,father_name,mother_name,phone,gender,address,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+4300A,1,Himanshu Chauhan,28/01/2011,Rahul,Santosh,9814156634,Male,"# 203, Ph-II, Ramdarbar, Chandigarh ",,,,,,,,,,,,,,,,,,,
+2790A,2,Ishaan Singh,27/09/2009,Balbir Singh,Dimple,9878887339,Male,"# 1068, Deep Complex, Hallomjra ",,,,,,,,,,,,,,,,,,,
+2416A,3,Iqra Khan,12/01/2011,Shakeel Ahmad Khan,Aameena Khan,9023135131,Female,"# 1247/1, Sector-30B, Chandigarh ",,,,,,,,,,,,,,,,,,,
+1846,4,Japjot Singh,03/04/2009,Gurpreet Singh,Sukhdeep Kaur,7508658200,Male,"# 1248, Ph- II,Ramdarbar ",,,,,,,,,,,,,,,,,,,
+2938A,5,Jasmine Chouhan,02/04/2010,Dushant,Sonia,9779803156,Female,"#1062/1, Hallomajra ",,,,,,,,,,,,,,,,,,,

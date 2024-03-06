@@ -26,13 +26,13 @@ const TermoneReportCard = ({
     let totalOutOf = 0;
     termonereportCardData.map((reportCard) => {
       const obtain = reportCard.total_marks_term_1 || 0;
-      const total = obtain;
+      const total = parseInt(obtain);
       const totalOutOfLocal = 100;
       t1_overallTotal += total;
       totalOutOf += totalOutOfLocal;
     });
 
-    const t1_percentage = (t1_overallTotal / totalOutOf) * 100;
+    const t1_percentage = ((t1_overallTotal / totalOutOf) * 100).toFixed(2);
 
     let t1_grade;
     if (t1_percentage >= 90) {
@@ -48,6 +48,7 @@ const TermoneReportCard = ({
     }
 
     return {
+      totalOutOf,
       t1_overallTotal,
       t1_percentage,
       t1_grade,
@@ -209,13 +210,13 @@ const TermoneReportCard = ({
                     ))}
 
                     <tr>
-                      <td>Term-1 Max : 500</td>
+                      <td>Term-1 Max : {overallData.totalOutOf}</td>
                       <td colSpan="2">
                         Term-1 Obitained : {overallData.t1_overallTotal}{" "}
                       </td>
                       <td>Term-1 % : {overallData.t1_percentage}</td>
                       <td colSpan="2">Term-1 Grade : {overallData.t1_grade}</td>
-                      <td colSpan="2">Term-2 Max : 500 </td>
+                      <td colSpan="2">{overallData.totalOutOf} </td>
                     </tr>
                     <tr></tr>
                   </tbody>

@@ -1,0 +1,6 @@
+adm_no,Roll_No,student_name,date_of_birth,father_name,mother_name,phone,gender,address,attendance_term_1,max_meeting_term_1,attendance_term_2,max_meeting_term_2,weight,height,vision_l,vision_r,admin_category,reservation_category,sgc,bpl,diffrently_abled,teacher_ward,religion,quota,date_of_admission,tc_issued,remarks
+4635A,1,Muskan,17/12/2009,Gopal Tamang,Shobha,8727083764,Female,"Plot No. 27/8, Indl. Area, Phase-2,Chandigarh",20,20,30,30,50,6,6,6,II,OBC,sgc,bpl,no,yes,Hindu,BPL,12-11-2011,ok,ok
+2952A,2,Nakul,06/06/2009,Devanand,Vandana,9876281232,Male,"# 177, Ph-II, Ramdarbar ",20,30,120,30,60,6,6,6,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+3205A,3,Navjot Singh,03/07/2009,Gurdev Singh,Radha,9646923551,Male,"# 879, Phase-II,Ramdarbar ",,,,,,,,,,,,,,,,,,,
+5229A,4,Nidhi,04/04/2010,Radhe Shyam,Seema,6284940278,Female,"#232ABlock-K, Colony No-4, Ind Area, Ph-I, Chd ",,,,,,,,,,,,,,,,,,,
+4661A,5,Piyush,01/09/2010,Om Parkash,Sudha,9855286545,Male,#288 Phase-2Ramdarbar,,,,,,,,,,,,,,,,,,,

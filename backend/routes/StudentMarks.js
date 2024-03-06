@@ -6,17 +6,35 @@ const router = express.Router();
 router.post("/marks", async (req, res) => {
   try {
     const { selectedClass, selectedSubject, selectedSection } = req.body;
-    
+    console.log(selectedClass, selectedSubject, selectedSection )
     if (!selectedClass || !selectedSubject || !selectedSection) {
       return res.status(400).json({ message: "Selected class, subject, and section are required." });
     }
 
-    let query;
-    const section = selectedSection.toLowerCase();
+
+    /////////////////////////////////////
+    const selectedPattern = `${selectedClass}_${selectedSection}_${selectedSubject}`;
+    const tablequery = `
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'gurunanak2024'
+        AND table_name LIKE '${selectedPattern}%';
+    `;
     
-    query = `SELECT * FROM ${selectedClass}_${section}_biodata JOIN ${selectedClass}_${section}_${selectedSubject} on ${selectedClass}_${section}_biodata.adm_no = ${selectedClass}_${section}_${selectedSubject}.Adm_no;`;
+    try {
+      const results = await new Promise((resolve, reject) => {
+        db.query(tablequery, (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        });
+      });
+          
+    query = `SELECT * FROM ${selectedClass}_${selectedSection}_biodata JOIN ${results[0].TABLE_NAME} on ${selectedClass}_${selectedSection}_biodata.adm_no = ${results[0].TABLE_NAME}.adm_no;`;
     
-    const results = await new Promise((resolve, reject) => {
+    const response = await new Promise((resolve, reject) => {
       db.query(query, (err, results) => {
         if (err) {
           reject(err);
@@ -26,7 +44,16 @@ router.post("/marks", async (req, res) => {
       });
     });
 
-    res.json(results);
+    res.json(response);
+    
+      // Handle the results here
+    } catch (error) {
+      console.error("Error querying tables:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    /////////////////////////////////////
+    // let query;
+
   } catch (error) {
     console.error("Error fetching marks:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -45,9 +72,7 @@ router.put("/marks/:adm_no", (req, res) => {
   let section = selectedSection.toLowerCase();
   if (selectedClass && selectedSubject) {
     query = `UPDATE ${selectedClass}_${section}_${selectedSubject} SET ? WHERE adm_no = "${adm_no}"`;
-  } else {
-    query = `UPDATE fifthenglish SET ? WHERE adm_no = ${adm_no}`;
-  }
+  } 
   db.query(query, [updatedStudentMarks], (err, results) => {
     if (err) {
       console.error("MySQL query error:", err);
@@ -84,23 +109,69 @@ router.get(
   }
 );
 /////////////////////
-
 router.get("/primarygrade/:selectedClass/:adm_no", (req, res) => {
-  const adm_no = req.params.adm_no;
-  const selectedClass = req.params.selectedClass;
-  let query;
-  if (selectedClass && adm_no) {
-    query = `SELECT * FROM ${selectedClass}_a_total where adm_no='${adm_no}';`;
+  const { selectedClass, adm_no } = req.params;
+  try {
+    const queryTableNames = `
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'gurunanak2024'
+        AND table_name LIKE '${selectedClass}_a%'
+        AND table_name NOT LIKE '${selectedClass}_a_%total'
+        AND table_name NOT LIKE '${selectedClass}_a_%biodata'
+    `;
+
+    db.query(queryTableNames, (err, results) => {
+      if (err) {
+        console.error("MySQL query error:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+      } else {
+        const tableRows = results.map((result) => result.TABLE_NAME);
+
+        if (tableRows && tableRows.length > 0) {
+          const queries = tableRows.map(
+            (table) => `
+              SELECT *
+              FROM ${table}
+              WHERE ${table}.adm_no = '${adm_no}'`
+          );
+
+          // Execute each query separately
+          const promises = queries.map(query => new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(results);
+              }
+            });
+          }));
+
+          // Wait for all queries to complete
+          Promise.all(promises)
+            .then((results) => {
+              // Concatenate all results into a single array
+              const mergedResults = [].concat(...results);
+              res.json(mergedResults);
+            })
+            .catch((error) => {
+              console.error("MySQL query error:", error);
+              res.status(500).json({ error: "Internal Server Error" });
+            });
+        } else {
+          console.error("No eligible table names found.");
+          res.status(404).json({ message: "No eligible table names found." });
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
   }
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("MySQL query error:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      res.json(results);
-    }
-  });
 });
+
+
+
 ///////////////////////
 // POST endpoint to save data to the database
 router.post("/nursery", (req, res) => {
@@ -280,7 +351,7 @@ router.get(
         AND table_name LIKE '${selectedClass}_${selectedSection}%'
         AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%total'
         AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%biodata'
-        AND table_name NOT LIKE '${selectedClass}_${selectedSection}_%vocational'
+        AND table_name NOT LIKE '${selectedClass}_${selectedSection}__%vocational'
     `;
 
       db.query(queryTableNames, (err, results) => {
@@ -325,8 +396,8 @@ router.get(
                   NULL AS portfoilo,
                   NULL AS sub_enrich_act,
                   NULL AS annual_exam,
-                  NULL AS grand_total,
-                  NULL AS final_grade,
+                  grand_total,
+                  final_grade,
                   theory_max,
                   theory_obtain,
                   practical_max,
